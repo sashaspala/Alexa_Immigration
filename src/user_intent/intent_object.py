@@ -1,2 +1,20 @@
-class IntentObject():
-	pass
+from abc import ABCMeta, abstractmethod, abstractproperty
+
+class IntentObject:
+    """
+    An abstract class to represent a user's question. 
+    """
+    __metaclass__ = ABCMeta
+
+    def __init__(self, intent):
+        self.intent = intent
+
+    def get_intent(self):
+        return self.intent
+
+    @abstractmethod
+    def is_complete(self):
+        """
+        Check if all the needed slots to answer the question are filled
+        """
+        raise NotImplementedError("is_complete is not implemented")
