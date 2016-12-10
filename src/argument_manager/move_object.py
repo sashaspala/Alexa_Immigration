@@ -1,0 +1,2 @@
+class MoveObject(IntentObject):
+	pass

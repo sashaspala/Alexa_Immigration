@@ -1,0 +1,2 @@
+class InformObject(IntentObject):
+	pass
