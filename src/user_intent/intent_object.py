@@ -10,18 +10,18 @@ class IntentObject:
         self.intent = intent
         self.country = country
 
-    def get_intent(self):
+    def getIntent(self):
         return self.intent
 
-    def get_country(self):
+    def getCountry(self):
         return self.country
 
-    def set_country(self, country):
+    def setCountry(self, country):
         self.country = country
 
     @abstractmethod
-    def is_complete(self):
+    def isComplete(self):
         """
         Check if all the needed slots to answer the question are filled
         """
-        raise NotImplementedError("is_complete is not implemented")
+        raise NotImplementedError("isComplete is not implemented")

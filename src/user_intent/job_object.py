@@ -1,6 +1,9 @@
+from intent_object import IntentObject
+from intents import Intent
+
 class JobObject(IntentObject):
-    def __init__(self, intent, country, city):
-        IntentObject.__init__(self, intent, country)
+    def __init__(self, country=None, city=None):
+        super(JobObject, self).__init__(Intent.JOB, country)
         self.city = city
 
     def isComplete(self):
@@ -9,5 +12,14 @@ class JobObject(IntentObject):
         else:
             return True
 
-    def get_city(self):
+    def getCity(self):
         return self.city
+
+    def setCity(self):
+        self.city = city
+
+if __name__ == "__main__":
+    job = JobObject()
+    assert not job.isComplete()
+    job.setCountry("Canada")
+    assert job.isComplete()
