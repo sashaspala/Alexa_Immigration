@@ -1,7 +1,9 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
 
-class IntentObject():
-
+class IntentObject:
+    """
+    An abstract class to represent a user's question. 
+    """
     __metaclass__ = ABCMeta
 
     def __init__(self, intent):
@@ -12,4 +14,7 @@ class IntentObject():
 
     @abstractmethod
     def is_complete(self):
+        """
+        Check if all the needed slots to answer the question are filled
+        """
         raise NotImplementedError("is_complete is not implemented")
