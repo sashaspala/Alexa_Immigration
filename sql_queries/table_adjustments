@@ -1,0 +1,75 @@
+/*
+alter table
+	backendDB.UserInfo 
+	drop column id;
+
+alter table 
+	backendDB.UserInfo 
+	add uid INT primary key auto_increment;
+
+insert into backendDB.UserInfo 
+	(age,sex,education,language)
+	values (25, 'male', 'grad student', 'English');
+*/
+/*
+insert into backendDB.UserInfo 
+	(age,sex,education,language)
+	values (29, 'male', 'grad student', 'Spanish');
+insert into backendDB.UserInfo 
+	(age,sex,education,language)
+	values (22, 'female', 'grad student', 'English');
+insert into backendDB.UserInfo 
+	(age,sex,education,language)
+	values (25, 'male', 'grad student', 'Mandarin');
+*/
+/*
+delete from backendDB.UserInfo
+	where uid<3;
+*/
+/*
+alter table 
+	backendDB.UserInfo 
+	add name varchar(45);
+update 
+	backendDB.UserInfo
+	set name='Person1'
+	where uid=6;
+update 
+	backendDB.UserInfo
+	set name='Person2'
+	where uid=5;
+update 
+	backendDB.UserInfo
+	set name='Person3'
+	where uid=4;
+update 
+	backendDB.UserInfo
+	set name='Person4'
+	where uid=3;
+drop table backendDB.UsersList;
+*/
+/*
+alter table
+	backendDB.UserContext 
+	drop column id;
+alter table 
+	backendDB.UserContext 
+	add context_id INT primary key auto_increment;
+*/
+/*
+set foreign_key_checks=0;
+alter table backendDB.CountryList 
+	modify id int auto_increment;
+set foreign_key_checks=1;
+alter table backendDB.FactsList 
+	modify idFactsList int auto_increment;
+*/
+/*
+delete from backendDB.FactsList
+	where idFactsList < 10;
+*/
+
+select
+	* 
+	from backendDB.FactsList
+	limit 10;
