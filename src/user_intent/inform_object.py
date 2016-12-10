@@ -1,11 +1,11 @@
 class InformObject(IntentObject):
 	def __init__(self, intent_name, country, city, topic):
-		IntentObject.__init__(self, intent_name, country)
+		IntentObject.__init__(self, intent, country)
 		self.topic = topic
 		self.city = city
 
 	def isComplete(self):
-		if self.intent_name == None or self.country == None or topic == None:
+		if self.intent == None or self.country == None or topic == None:
 			return False
 		else:
 			return True
@@ -15,6 +15,3 @@ class InformObject(IntentObject):
 
 	def getCity(self):
 		return self.city
-
-	def getCountry(self):
-		return self.country
