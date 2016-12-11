@@ -6,7 +6,10 @@ Adapted from Alexa Skill sample color-expert-python
 from __future__ import print_function
 #from context_manager import ContextManager
 # get dialog manager somehow
-from src.user_intent.inform_object import InformObject
+import sys
+from os import path
+sys.path.append( path.dirname( path.dirname( path.abspath(__file__))))
+from user_intent.inform_object import InformObject
 
 
 class ArgumentManager: # not sure if we really need the event session info
@@ -79,3 +82,4 @@ if __name__ == '__main__':
     }
     argMan = ArgumentManager(intent)
     arguments = argMan.createIntentObject()
+    print(arguments.isComplete())
