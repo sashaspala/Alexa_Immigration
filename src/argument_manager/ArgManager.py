@@ -49,15 +49,15 @@ class ArgumentManager: # not sure if we really need the event session info
     def checkForUser(session):
         if session.get('user') is not None:
             ## already set up the user account
-            return (session['user']['userId'], session['user']['accessToken']
+            return (session['user']['userId'], session['user']['accessToken'])
         else:
             return None
 
     def getUserInfo(self, session):
-        user = checkForUser(session):
-        if user is not None:
+        #user = checkForUser(session):
+        #if user is not None:
 
-    def getContextObject(self,):
+    def getContextObject(self, is_new_session, user):
         #argObject = self.createIntentObject()
         #contextManager = ContextManager()
         # context manager methods
@@ -80,6 +80,32 @@ def on_blank_session_started(session):
     jobs, moving, and general facts for Canada, Australia, and the UK."
     session_attributes = session.get('attributes', {})
     return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, False))
+
+def on_session_started(session):
+    speech_output = "Welcome to Alexa Immigration Support!"
+    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you \
+    can say Alexa, what are jobs like in Australia? Currently, I can answer questions about \
+    jobs, moving, and general facts for Canada, Australia, and the UK."
+    session_attributes = session.get('attributes', {})
+    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, True))
+
+def ask_clarification(session):
+    speech_output = "Sorry, I didn't understand what you said." \
+       "You can ask me things like, Alexa, how do I move to Canada? or " \
+       "can say Alexa, what are jobs like in Australia?" \
+       "Currently, I can answer questions about jobs, moving," \
+       "and general facts for Canada, Australia, and the UK."
+
+    reprompt_text = "Sorry, I didn't understand what you said." \
+       "You can ask me things like, Alexa, how do I move to Canada? or " \
+       "can say Alexa, what are jobs like in Australia?" \
+       "Currently, I can answer questions about jobs, moving," \
+       "and general facts for Canada, Australia, and the UK."
+
+    session_attributes = session.get('attributes', {})
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, should_end_session))
+
 
 def on_intent_question_asked(fact, session, intentObject):
     speech_output = fact
@@ -119,7 +145,10 @@ def build_response(session_attributes, speechlet_response):
     }
 
 def on_launch(launch_request, session):
-    return on_blank_session_started(session)
+    if event['session'] == 'new':
+        return on_session_started(session)
+    else:
+        return ask_clarification(session)
 
 def on_intent(intent_request, session, is_new_session):
     am = ArgumentManager(event['request']['intent'], context)
@@ -170,6 +199,8 @@ def lambda_handler(event, context):
     elif event['request']['type'] == "SessionEndedRequest":
         pass
 
+
+
 '''
 if __name__ == '__main__':
     intent = {
@@ -190,4 +221,4 @@ if __name__ == '__main__':
     }
     argMan = ArgumentManager(intent)
     arguments = argMan.createIntentObject()
-    '''
+'''
