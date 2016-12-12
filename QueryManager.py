@@ -165,7 +165,7 @@ class QueryManager():
     if len(r) > 0:
       return r[0][0] # return just the string
     else:
-      return r
+      return ''
     
     
   def getContext(self, intent):
@@ -266,10 +266,11 @@ class QueryManager():
     query.append("order by {}.{} desc limit 1;".format(table,
                                                        table_id)) 
     r = self.queryDb(" ".join(query))
+    # return a dictionary
+    output = {'user':None, 'country':None, 'city':None, 'intent':None, 'topic':None}
     if len(r) > 0:
-      return r[0] # return whole row
-    else:
-      return r
+      output = {'user':r[0][0], 'country':r[0][1], 'city':r[0][2], 'intent':r[0][3], 'topic':r[0][4]} 
+    return output
     
     
   def updateContext(self, intent):

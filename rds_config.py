@@ -1,9 +1,7 @@
 
 
-db_endpoint = "immigrationsupport.co32ymx0dhgi.us-east-1.rds.amazonaws.com"
+endpoint = "immigrationsupport.co32ymx0dhgi.us-east-1.rds.amazonaws.com"
 
-db_username = "admin"
+user = "admin"
 
-db_password = "adminnimda"
-
-db_name = "immigrationsupport"
+db = "backendDB"
