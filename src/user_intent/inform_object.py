@@ -7,8 +7,9 @@ class InformObject(IntentObject):
 		super(InformObject, self).__init__(Intent.INFORM, country)
 		#self.topic = topic
 		#self.city = city
-                self.setRequiredSlot(Slots.TOPIC, topic)
-                self.setOptionalSlot(Slots.CITY, city)
+                self.setSlot(Slots.TOPIC, topic)
+                self.requiredSlots.append(Slots.TOPIC)
+                self.setSlot(Slots.CITY, city)
 
 	#def isComplete(self):
 	#	if self.intent == None or self.country == None or self.topic == None:
@@ -25,6 +26,6 @@ class InformObject(IntentObject):
 if __name__ == "__main__":
     inform = InformObject()
     assert not inform.isComplete()
-    inform.setRequiredSlot(Slots.COUNTRY, "Canada")
-    inform.setRequiredSlot(Slots.TOPIC, "weather")
+    inform.setSlot(Slots.COUNTRY, "Canada")
+    inform.setSlot(Slots.TOPIC, "weather")
     assert inform.isComplete()

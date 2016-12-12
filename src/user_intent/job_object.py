@@ -5,7 +5,7 @@ from slots import Slots
 class JobObject(IntentObject):
     def __init__(self, country=None, city=None):
         super(JobObject, self).__init__(Intent.JOB, country)
-        self.setOptionalSlot(Slots.CITY, city)
+        self.setSlot(Slots.CITY, city)
 
     #def isComplete(self):
     #    if self.intent == None or self.country == None:
@@ -17,10 +17,10 @@ class JobObject(IntentObject):
         return self.getSlot(Slots.CITY)
 
     def setCity(self, city):
-        self.setOptionalSlot(Slots.CITY, city)
+        self.setSlot(Slots.CITY, city)
 
 if __name__ == "__main__":
     job = JobObject()
     assert not job.isComplete()
-    job.setRequiredSlot(Slots.COUNTRY, "Canada")
+    job.setSlot(Slots.COUNTRY, "Canada")
     assert job.isComplete()

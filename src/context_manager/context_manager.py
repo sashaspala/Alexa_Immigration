@@ -1,14 +1,13 @@
-#TODO import query manager
-# Or: talk to the database directly?
-
 class ContextManager:
     def __init__(self):
         #TODO init query manager
         pass
 
     def getContext(self, intentObj):
-        # fill in missing slots
-        # return intentObj
+        # get latest context for a user
+        # compare current intent obj with said context
+        # fill in empty slots
+        # determine if update is needed, and updateContext if yes
         pass
 
     def updateContext(self):
