@@ -6,7 +6,7 @@ class ContextManager:
         self.user = user
         self.qm = QueryManager()
 
-    def completeContext(self, intent_obj):
+    def getContext(self, intent_obj):
         """
         Complete empty slots in the supplied intent object.
         Update context in database is necessary
@@ -17,9 +17,9 @@ class ContextManager:
         # determine if update is needed, and updateContext if yes
         context = self.getContext()
         mixinContext(self, intent_obj, context)
+        return intent_obj
 
-    def getContext(self):
-        #TODO: need to clarify what to supply in the dictionary passed to qm
+    def retrieveContext(self):
         context = self.qm.getContext({"user":self.user})
         # assert context["user"] == self.user
         return context
