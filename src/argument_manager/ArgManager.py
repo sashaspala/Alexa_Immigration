@@ -5,14 +5,21 @@ Adapted from Alexa Skill sample color-expert-python
 
 from __future__ import print_function
 
+# import sys, os
+# sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+# from src.user_intent.inform_object import InformObject
+# from src.user_intent.move_object import MoveObject
+# from src.user_intent.job_object import JobObject
+# from ContextManager import ContextManager
+# from QueryManager import QueryManager
 
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
-from src.user_intent.inform_object import InformObject
-from src.user_intent.move_object import MoveObject
-from src.user_intent.job_object import JobObject
-from ContextManager import ContextManager
-from QueryManager import QueryManager
+
+welcome_text = "Welcome to Alexa Immigration Support. "
+explanation_text = "You can ask me things like, Alexa, how do I move to Canada? Or you " \
+                   "can say Alexa, what are jobs like in Australia? Currently, I can answer questions about" \
+                   "jobs, moving, and general facts for Canada, Australia, and the UK. "
+thank_you_text = "Thank you for using Alexa Immigration Support. Have a nice day! "
+
 
 class ArgumentManager:  # not sure if we really need the event session info
     def __init__(self, intent, context=None):
@@ -43,9 +50,9 @@ class ArgumentManager:  # not sure if we really need the event session info
         elif self.name == "JOB":
             intent_object = JobObject(country, city)
         else:
-            raiseValueError("Invalid intent")
-            ##might want to pass to end_session function here or, to get_clarification() instead
-
+            # raise ValueError("Invalid intent")
+            ##might want to pass to end_session function here
+            on_session_ended
         return intent_object
 
     def checkForUser(session):
@@ -134,53 +141,63 @@ def build_response(session_attributes, speechlet_response):
 
 # is the idea behind this method to handle sessions started when the user is using the skill for the first time?
 def on_blank_session_started(session):
-    speech_output = "Welcome to Alexa Immigration Support!"
-    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you \
-    can say Alexa, what are jobs like in Australia? Currently, I can answer questions about \
-    jobs, moving, and general facts for Canada, Australia, and the UK."
-    session_attributes = session.get('attributes', {})
-    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, False))
+    session_attributes = {'questions': []}
+    speech_output = welcome_text + explanation_text
+    reprompt_text = explanation_text
+    card_title = "Welcome"
+
+    # todo: what information would we need to get from the user?
+
+    return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, False))
 
 
 def on_session_started(session):
-    session_attributes = {'questions': []}
+    # create a list in attributes that stores all fact dictionaries in current session
+    # this will allow us to return a card at the end with a summary of the facts discussed
 
-    speech_output = "Welcome to Alexa Immigration Support! " \
-                    "You can ask me things like, Alexa, how do I move to Canada? Or you " \
-                    "can say Alexa, what are jobs like in Australia? Currently, I can answer questions about" \
-                    "jobs, moving, and general facts for Canada, Australia, and the UK."
+    # todo: we might need to redirect a user to on_blank_session_started if the user
+    # todo: is using the app for the first time
+
+
+    session_attributes = {'questions': []}
+    speech_output = welcome_text + explanation_text
 
     # todo: we might not need to provide example questions, Alexa might do that for us. Need to look into that
-    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you " \
-                    "can say Alexa, what are jobs like in Australia? Currently, I can answer questions about " \
-                    "jobs, moving, and general facts for Canada, Australia, and the UK."
-
+    reprompt_text = explanation_text
+    card_title = "Welcome"
     should_end_session = False
 
     return build_response(session_attributes,
-                          build_speechlet_response('Welcome', speech_output, reprompt_text, should_end_session))
+                          build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
 
 def ask_clarification(session):
     """This function sends a response asking the speaker to repeat their question
        This function is used in situations where an intent cannot be understood """
 
-    speech_output = "Sorry, I didn't understand what you said." \
-                    "You can ask me things like, Alexa, how do I move to Canada? or " \
-                    "can say Alexa, what are jobs like in Australia?" \
-                    "Currently, I can answer questions about jobs, moving," \
-                    "and general facts for Canada, Australia, and the UK."
+    speech_output = "Sorry, I didn't understand what you said. " + explanation_text
 
-    reprompt_text = "Sorry, I didn't understand what you said." \
-                    "You can ask me things like, Alexa, how do I move to Canada? or you" \
-                    "can say Alexa, what are jobs like in Australia?" \
-                    "Currently, I can answer questions about jobs, moving," \
-                    "and general facts for Canada, Australia, and the UK."
+    reprompt_text = "Sorry, I didn't understand what you said." + explanation_text
+    card_title = "Need clarification: "
 
     session_attributes = session.get('attributes', {})
     should_end_session = False
     return build_response(session_attributes,
-                          build_speechlet_response('Test', speech_output, reprompt_text, should_end_session))
+                          build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+
+
+def help_intent(session):
+    """Returns a response in the event of an AMAZON.HelpIntent"""
+
+    session_attributes = session.get('attributes', {})
+    speech_output = explanation_text
+    reprompt_text = explanation_text
+    card_title = "Help: "
+
+    should_end_session = False
+
+    return build_response(session_attributes,
+                          build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
 
 def on_intent_question_asked(fact, session, intentObject):
@@ -192,9 +209,7 @@ def on_intent_question_asked(fact, session, intentObject):
     reprompt_text = "Would you like to learn anything else?"
 
     # add current session attributes to the list of session attributes
-    session['attributes']['questions'].append({"country": intentObject.getCountry(), "city": intentObject.getCountry(), \
-                                               "intent": intentObject.getIntent(),
-                                               "fact": fact})  # possibly using it for card
+    session['attributes']['questions'].append({"fact": fact})  # possibly using it for card
     session_attributes = session.get('attributes')
 
     return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
@@ -210,6 +225,10 @@ def on_launch(launch_request, session):
 
 
 def on_intent(intent_request, session, is_new_session):
+    # redirect 'AMAZON.HelpIntent
+    if intent_request['intent']['name'] == "AMAZON.HelpIntent":
+        return help_intent(session)
+
     am = ArgumentManager(intent_request['intent'], session)
     # sending the intents and context element to argurment manager
 
@@ -228,27 +247,32 @@ def on_intent(intent_request, session, is_new_session):
     return on_intent_question_asked(fact, session)
 
 
-def on_session_ended(self, session):
+def create_final_card_output(session):
+    if 'questions' not in session.get('attributes', {}):
+        card_output = thank_you_text
+
+    else:
+        questions = session['attributes']['questions']
+        facts = [question.get('fact') for question in questions if question.get('fact') is not None]
+
+        # covers only facts so far
+        if facts:
+            card_output = "These are the facts we covered in this session: %s. " % ('. '.join(facts))
+        else:
+            card_output = thank_you_text
+
+    return card_output
+
+
+def on_session_ended(request, session):
     # make a card collecting all the intents, countries and topics discussed during
     # the session
-    card_title = "Session Ended == Your Conversation Today"
-    speech_output = "Thank you for using Immigration Support. You will receive a card " \
+    card_title = "Session Ended: Your Conversation Today"
+    speech_output = "You will receive a card " \
                     "with all the information you asked about today. " \
-                    "Have a nice day!"
+                    + thank_you_text
 
-    questions = session['attributes']['questions']
-
-    # countries = list(set([question.get('country') for question in questions]))
-    # cities = list(set([question.get('city') for question in questions if question.get('city') is not None]))
-    # topics = list(set([question.get('topic') for question in questions if question.get('topic') is not None]))
-    # intents = list(set([question.get('intent') for question in questions if question.get('intent') != 'INFORM']))
-    facts = list(set([question.get('fact') for question in questions if question.get('fact') is not None]))
-
-    # covers only facts so far
-    if facts:
-        card_output = "These are the facts we covered in this session: %s. " % ('. '.join(facts))
-    else:
-        card_output = "Thank you for using ImmigrationSupport. Have a nice day!"
+    card_output = create_final_card_output(session)
 
     should_end_session = True
     return build_response({}, build_final_speechlet_response(
