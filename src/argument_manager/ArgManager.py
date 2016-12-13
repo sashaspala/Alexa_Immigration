@@ -5,13 +5,13 @@ Adapted from Alexa Skill sample color-expert-python
 
 from __future__ import print_function
 
-# import sys, os
-# sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
-# from src.user_intent.inform_object import InformObject
-# from src.user_intent.move_object import MoveObject
-# from src.user_intent.job_object import JobObject
-# from ContextManager import ContextManager
-# from QueryManager import QueryManager
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from src.user_intent.inform_object import InformObject
+from src.user_intent.move_object import MoveObject
+from src.user_intent.job_object import JobObject
+from ContextManager import ContextManager
+from QueryManager import QueryManager
 
 
 welcome_text = "Welcome to Alexa Immigration Support. "
@@ -43,6 +43,7 @@ class ArgumentManager:  # not sure if we really need the event session info
         ## now we have minimum values for intents/slots
         ## want to create intentObject, then pass to context manager
 
+
         if self.name == "INFORM":
             intent_object = InformObject(country, city, topic)
         elif self.name == "MOVE":
@@ -50,25 +51,35 @@ class ArgumentManager:  # not sure if we really need the event session info
         elif self.name == "JOB":
             intent_object = JobObject(country, city)
         else:
-            # raise ValueError("Invalid intent")
+            raise ValueError("Invalid intent")
             ##might want to pass to end_session function here
-            on_session_ended
+
+
         return intent_object
 
-    def checkForUser(session):
+    def checkForUser(self):
+        session = self.context
+
         if session.get('user') is not None:
             ## already set up the user account
             return (session['user']['userId'], session['user']['accessToken'])
         else:
             return None
 
+
+    def buildUserInfo(self):
+        # extracts userID from session and returns it
+        return self.context['user']['userID']
+
+
     def getUserInfo(self, session):
+        session = self.context
         # user = checkForUser(session):
         # if user is not None:
         pass
 
     def getContextObject(self, intent_object, is_new_session, user):
-        contextManager = ContextManager()
+        contextManager = ContextManager(user)
         contextObject = contextManager.getContext(intent_object)
 
         # maybe, if session is not new, we might have to confirm that it's
@@ -80,7 +91,7 @@ class ArgumentManager:  # not sure if we really need the event session info
         pass
 
     def query_db(self, unambiguousObject):
-        return QueryManager.getCountryInfo(unambiguousObject)  # get actual fact
+        return QueryManager.getFact(unambiguousObject)  # get actual fact
 
 
 # response builders
@@ -185,6 +196,17 @@ def ask_clarification(session):
     return build_response(session_attributes,
                           build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
+def tell_missing_info(session):
+    """Gives a response when required information is missing"""
+    speech_output = "I don\'t have enough information. " + explanation_text
+    reprompt_text = explanation_text
+    card_title = "Not enough information" + explanation_text
+
+    session_attributes = session.get('attributes', {})
+    should_end_session = False
+    return build_response(session_attributes,
+                          build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
+
 
 def help_intent(session):
     """Returns a response in the event of an AMAZON.HelpIntent"""
@@ -209,7 +231,10 @@ def on_intent_question_asked(fact, session, intentObject):
     reprompt_text = "Would you like to learn anything else?"
 
     # add current session attributes to the list of session attributes
-    session['attributes']['questions'].append({"fact": fact})  # possibly using it for card
+    current_session = intentObject.getSlots()
+    current_session['fact'] = fact
+
+    session['attributes']['questions'].append(current_session)  # possibly using it for card
     session_attributes = session.get('attributes')
 
     return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
@@ -235,15 +260,18 @@ def on_intent(intent_request, session, is_new_session):
     # get my outgoing object from the contextmanager
     if is_new_session:
         # additionally send user info from LinkAccount card
-        # todo: buildUserInfo method
-        userId = am.buildUserInfo(session)
+        userId = am.buildUserInfo()
         unambiguousObject = am.getContextObject(am.createIntentObject(), True,
-                                                None)  # (of type intentObject) # 'None' bit is User
+                                                userId)  # (of type intentObject)
     else:
         unambiguousObject = am.getContextObject(am.createIntentObject(), False, None)
 
+    # if slots are missing and contextManager can't fill them with previous context
+    if unambiguousObject.isComplete() == False:
+        tell_missing_info(session) # send a response asking to try again
+
     ##query_db
-    fact = am.query_db(unambiguousObject)
+    fact = am.query_db(unambiguousObject.getSlots()) # feeds a dictionary containing slots and values, returns a string
     return on_intent_question_asked(fact, session)
 
 
