@@ -73,9 +73,10 @@ class ArgumentManager:  # not sure if we really need the event session info
 
 
     def getUserInfo(self, session):
-        session = self.context
-        # user = checkForUser(session):
-        # if user is not None:
+        user = checkForUser(session)
+        #if user is not None:
+
+        #else:
         pass
 
     def getContextObject(self, intent_object, is_new_session, user):
@@ -91,11 +92,59 @@ class ArgumentManager:  # not sure if we really need the event session info
         pass
 
     def query_db(self, unambiguousObject):
-        return QueryManager.getFact(unambiguousObject)  # get actual fact
+        ###need to turn unabmiguousObject into a dictionary
+        return QueryManager.getFact(unambiguousObject)
+
+
+
+def on_blank_session_started(session):
+    speech_output = "Welcome to Alexa Immigration Support!"
+    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you \
+    can say Alexa, what are jobs like in Australia? Currently, I can answer questions about \
+    jobs, moving, and general facts for Canada, Australia, and the UK."
+    session_attributes = session.get('attributes', {})
+    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, False))
+
+def on_session_started(session):
+    speech_output = "Welcome to Alexa Immigration Support!"
+    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you \
+    can say Alexa, what are jobs like in Australia? Currently, I can answer questions about \
+    jobs, moving, and general facts for Canada, Australia, and the UK."
+    session_attributes = session.get('attributes', {})
+    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, True))
+
+def ask_clarification(session):
+    speech_output = "Sorry, I didn't understand what you said." \
+       "You can ask me things like, Alexa, how do I move to Canada? or " \
+       "can say Alexa, what are jobs like in Australia?" \
+       "Currently, I can answer questions about jobs, moving," \
+       "and general facts for Canada, Australia, and the UK."
+
+    reprompt_text = "Sorry, I didn't understand what you said." \
+       "You can ask me things like, Alexa, how do I move to Canada? or " \
+       "can say Alexa, what are jobs like in Australia?" \
+       "Currently, I can answer questions about jobs, moving," \
+       "and general facts for Canada, Australia, and the UK."
+
+    session_attributes = session.get('attributes', {})
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, should_end_session))
+
+
+def on_intent_question_asked(fact, session, intentObject):
+    speech_output = fact
+    reprompt_text = ""
+
+    session_attributes = {"country": intentObject.getCountry(), "city": intentObject.getCountry(), \
+    "intent": intentObject.getIntent()}
+    return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
+    speech_output, reprompt_text, False))
+
 
 
 # response builders
 # ----------------------------------------------------------------------------
+
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {

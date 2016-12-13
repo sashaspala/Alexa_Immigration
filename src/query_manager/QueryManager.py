@@ -38,7 +38,8 @@ class QueryManager():
                    'user':{'table':'UserInfo',
                            'fields':{'id':'uid', 'name':'name','age':'age',
                                      'sex':'sex','education':'education',
-                                     'language':'language','industry':'industry'}},
+                                     'language':'language','industry':'industry',
+                                     'amazonID':'amazonID'}},
                    'context':{'table':'UserContext',
                               'fields':{'id':'context_id','user':'uid',
                                         'country':'`requested-cid`','topic':'topic',
@@ -345,12 +346,67 @@ class QueryManager():
     columns = ','.join(columns)
     values = ','.join(values)
     q = "insert into {} ({}) values ({});".format(table,
-                                                 columns,
-                                                 values)
+                                                  columns,
+                                                  values)
     print q
     self.queryDb(q)
     
-  
+
+  def isUserInDb(self, amazon_id):
+    """
+    Given an Amazon ID, check to see if that user is in our db or not.
+    Returns a boolean, ==True if they exist.
+    """
+    q = 'select * from UserInfo where amazonID={};'.format(amazon_id)
+    return len(self.queryDb(q)) > 0
+
+
+  def addUser(self, user_dict):
+    """
+    Given a dictionary of user info to add to the db, do so.
+    """"
+    name = user_dict.get('name',None)
+    age = user_dict.get('age',None)
+    sex = user_dict.get('sex',None)
+    language = user_dict.get('language',None)
+    education = user_dict.get('education',None)
+    industry = user_dict.get('industry',None)
+    amazonID = user_dict.get('amazonID',None)
+
+    columns = []
+    values = []
+    
+    if amazonID is not None:
+      columns.append(self.schema['user']['fields']['amazonID'])
+      values.append(amazonID[:45].join(["'", "'"])
+    if name is not None:
+      columns.append(self.schema['user']['fields']['name'])
+      values.append(name[:45].join(["'", "'"])
+    if sex is not None:
+      columns.append(self.schema['user']['fields']['sex'])
+      values.append(sex[:45].join(["'", "'"])
+    if language is not None:
+      columns.append(self.schema['user']['fields']['language'])
+      values.append(language[:45].join(["'", "'"])
+    if education is not None:
+      columns.append(self.schema['user']['fields']['education'])
+      values.append(education[:45].join(["'", "'"])
+    if industry is not None:
+      columns.append(self.schema['user']['fields']['industry'])
+      values.append(industry[:45].join(["'", "'"])
+    if age is not None:
+      columns.append(self.schema['user']['fields']['age'])
+      values.append(age)
+
+    table = self.schema['user']['table']
+    columns = ','.join(columns)
+    values = ','.join(values)
+    query = "insert into {} ({}) values ({});".format(table,
+                                                      columns,
+                                                      values)
+    print q
+    self.queryDb(q)
+
   
 '''    
 ###Send finished query object to dialog manager
