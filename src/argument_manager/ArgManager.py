@@ -140,13 +140,11 @@ def on_intent_question_asked(fact, session, intentObject):
     return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
     speech_output, reprompt_text, False))
 
-=======
-        return QueryManager.getFact(unambiguousObject)  # get actual fact
 
 
 # response builders
 # ----------------------------------------------------------------------------
->>>>>>> 3a208c8cf875d87a0a7fd725170d872445e2ab51
+
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
