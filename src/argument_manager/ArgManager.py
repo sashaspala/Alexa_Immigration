@@ -217,7 +217,7 @@ def on_session_ended(self, session):
     facts = list(set([question.get('fact') for question in conversation if question.get('fact') is not None]))
 
     # covers only facts so far
-    speech_output = "These are the facts we covered: %s. " % (' '.join(facts))
+    speech_output = "These are the facts we covered: %s. " % ('. '.join(facts))
 
     should_end_session = True
     return build_response({}, build_speechlet_response(
