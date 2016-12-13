@@ -350,6 +350,11 @@ class QueryManager():
     print q
     self.queryDb(q)
     
+
+  def isUserInDb(self, amazon_id):
+    pass
+  def addUser(self, user_dict):
+    pass
   
   
 '''    
