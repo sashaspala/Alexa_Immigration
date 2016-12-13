@@ -54,8 +54,12 @@ class ArgumentManager: # not sure if we really need the event session info
             return None
 
     def getUserInfo(self, session):
-        #user = checkForUser(session):
-        #if user is not None:
+        user = checkForUser(session)
+        if user is not None:
+
+        else:
+
+        pass
 
     def getContextObject(self, is_new_session, user):
         #argObject = self.createIntentObject()
@@ -69,7 +73,7 @@ class ArgumentManager: # not sure if we really need the event session info
         pass
 
     def query_db(self, unambiguousObject):
-        return QueryManager.getCountryInfo(unambiguousObject)
+        return QueryManager.getFact(unambiguousObject)
 
 
 
@@ -114,7 +118,7 @@ def on_intent_question_asked(fact, session, intentObject):
     session_attributes = {"country": intentObject.getCountry(), "city": intentObject.getCountry(), \
     "intent": intentObject.getIntent()}
     return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
-    speech_output, reprompt_text, False)
+    speech_output, reprompt_text, False))
 
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
