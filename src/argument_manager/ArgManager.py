@@ -6,14 +6,13 @@ Adapted from Alexa Skill sample color-expert-python
 from __future__ import print_function
 
 
-# import context manager
-# import query manager
-# import intent objects
-
-# importing objects for local testing
-# import sys, os
-# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-# from user_intent.inform_object import InformObject
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+from src.user_intent.inform_object import InformObject
+from src.user_intent.move_object import MoveObject
+from src.user_intent.job_object import JobObject
+from ContextManager import ContextManager
+from QueryManager import QueryManager
 
 class ArgumentManager:  # not sure if we really need the event session info
     def __init__(self, intent, context=None):
@@ -45,7 +44,7 @@ class ArgumentManager:  # not sure if we really need the event session info
             intent_object = JobObject(country, city)
         else:
             raiseValueError("Invalid intent")
-            ##might want to pass to end_session function here
+            ##might want to pass to end_session function here or, to get_clarification() instead
 
         return intent_object
 
@@ -77,6 +76,62 @@ class ArgumentManager:  # not sure if we really need the event session info
         return QueryManager.getCountryInfo(unambiguousObject)  # get actual fact
 
 
+# response builders
+# ----------------------------------------------------------------------------
+
+def build_speechlet_response(title, output, reprompt_text, should_end_session):
+    return {
+        'outputSpeech': {
+            'type': 'PlainText',
+            'text': output
+        },
+        'card': {
+            'type': 'Simple',
+            'title': "SessionSpeechlet - " + title,
+            'content': "SessionSpeechlet - " + output
+        },
+        'reprompt': {
+            'outputSpeech': {
+                'type': 'PlainText',
+                'text': reprompt_text
+            }
+        },
+        'shouldEndSession': should_end_session
+    }
+
+
+def build_final_speechlet_response(title, speech_output, reprompt_text, card_output, should_end_session):
+    return {
+        'outputSpeech': {
+            'type': 'PlainText',
+            'text': speech_output
+        },
+        'card': {
+            'type': 'Simple',
+            'title': "SessionSpeechlet - " + title,
+            'content': "SessionSpeechlet - " + card_output
+        },
+        'reprompt': {
+            'outputSpeech': {
+                'type': 'PlainText',
+                'text': reprompt_text
+            }
+        },
+        'shouldEndSession': should_end_session
+    }
+
+
+def build_response(session_attributes, speechlet_response):
+    return {
+        'version': '1.0',
+        'sessionAttributes': session_attributes,
+        'response': speechlet_response
+    }
+
+
+# functions for dialogue manager
+# --------------------------------------------------------------------------
+
 # is the idea behind this method to handle sessions started when the user is using the skill for the first time?
 def on_blank_session_started(session):
     speech_output = "Welcome to Alexa Immigration Support!"
@@ -88,7 +143,7 @@ def on_blank_session_started(session):
 
 
 def on_session_started(session):
-    session_attributes = {'conversation': []}
+    session_attributes = {'questions': []}
 
     speech_output = "Welcome to Alexa Immigration Support! " \
                     "You can ask me things like, Alexa, how do I move to Canada? Or you " \
@@ -146,50 +201,22 @@ def on_intent_question_asked(fact, session, intentObject):
                                                                        speech_output, reprompt_text, False))
 
 
-def build_speechlet_response(title, output, reprompt_text, should_end_session):
-    return {
-        'outputSpeech': {
-            'type': 'PlainText',
-            'text': output
-        },
-        'card': {
-            'type': 'Simple',
-            'title': "SessionSpeechlet - " + title,
-            'content': "SessionSpeechlet - " + output
-        },
-        'reprompt': {
-            'outputSpeech': {
-                'type': 'PlainText',
-                'text': reprompt_text
-            }
-        },
-        'shouldEndSession': should_end_session
-    }
-
-
-def build_response(session_attributes, speechlet_response):
-    return {
-        'version': '1.0',
-        'sessionAttributes': session_attributes,
-        'response': speechlet_response
-    }
-
-
 def on_launch(launch_request, session):
     """Responds to Launch Requests"""
     if session['new']:
         return on_session_started(session)
-    else: # when a request was made with no intent, and it's not the beginning of a session
+    else:  # when a request was made with no intent, and it's not the beginning of a session
         return ask_clarification(session)
 
 
 def on_intent(intent_request, session, is_new_session):
-    am = ArgumentManager(event['request']['intent'], context)
+    am = ArgumentManager(intent_request['intent'], session)
     # sending the intents and context element to argurment manager
 
     # get my outgoing object from the contextmanager
     if is_new_session:
         # additionally send user info from LinkAccount card
+        # todo: buildUserInfo method
         userId = am.buildUserInfo(session)
         unambiguousObject = am.getContextObject(am.createIntentObject(), True,
                                                 None)  # (of type intentObject) # 'None' bit is User
@@ -205,24 +232,31 @@ def on_session_ended(self, session):
     # make a card collecting all the intents, countries and topics discussed during
     # the session
     card_title = "Session Ended == Your Conversation Today"
-    #speech_output = "Thank you for using Immigration Support. You will receive a card " \
-                    #"with all the information you asked about today. " \
-                    #"Have a nice day!"
-    conversation = session['attributes']['questions']
+    speech_output = "Thank you for using Immigration Support. You will receive a card " \
+                    "with all the information you asked about today. " \
+                    "Have a nice day!"
 
-    #countries = list(set([question.get('country') for question in conversation]))
-    #cities = list(set([question.get('city') for question in conversation if question.get('city') is not None]))
-    #topics = list(set([question.get('topic') for question in conversation if question.get('topic') is not None]))
-    #intents = list(set([question.get('intent') for question in conversation if question.get('intent') != 'INFORM']))
-    facts = list(set([question.get('fact') for question in conversation if question.get('fact') is not None]))
+    questions = session['attributes']['questions']
+
+    # countries = list(set([question.get('country') for question in questions]))
+    # cities = list(set([question.get('city') for question in questions if question.get('city') is not None]))
+    # topics = list(set([question.get('topic') for question in questions if question.get('topic') is not None]))
+    # intents = list(set([question.get('intent') for question in questions if question.get('intent') != 'INFORM']))
+    facts = list(set([question.get('fact') for question in questions if question.get('fact') is not None]))
 
     # covers only facts so far
-    speech_output = "These are the facts we covered: %s. " % ('. '.join(facts))
+    if facts:
+        card_output = "These are the facts we covered in this session: %s. " % ('. '.join(facts))
+    else:
+        card_output = "Thank you for using ImmigrationSupport. Have a nice day!"
 
     should_end_session = True
-    return build_response({}, build_speechlet_response(
-        card_title, speech_output, None, should_end_session))
+    return build_response({}, build_final_speechlet_response(
+        card_title, speech_output, None, card_output, should_end_session))
 
+
+# lambda handler
+# -----------------------------------------------------------------------------
 
 def lambda_handler(event, context):
     # pass intent, context
