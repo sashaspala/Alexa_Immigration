@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.query_manager import QueryManager
+from ..query_manager import QueryManager
 
 class ContextManager:
     def __init__(self, user):
@@ -15,7 +15,7 @@ class ContextManager:
         # compare current intent obj with said context
         # fill in empty slots
         # determine if update is needed, and updateContext if yes
-        context = self.getContext()
+        context = self.retrieveContext()
         mixinContext(self, intent_obj, context)
         return intent_obj
 
@@ -50,3 +50,6 @@ class ContextManager:
         """
         context["user"] = self.user
         self.qm.updateContext(context)
+
+if __name__ == "__main__":
+    cm = ContextManager("test")
