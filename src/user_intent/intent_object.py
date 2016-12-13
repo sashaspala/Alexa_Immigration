@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
+from slots import Slots
 
 class IntentObject:
     """
@@ -7,21 +8,62 @@ class IntentObject:
     __metaclass__ = ABCMeta
 
     def __init__(self, intent, country):
-        self.intent = intent
-        self.country = country
+        #self.requiredSlots = {Slots.INTENT : intent, Slots.COUNTRY : country}
+        #self.optionalSlots = {}
+        self.slots = {Slots.INTENT : intent, Slots.COUNTRY : country}
+        self.requiredSlots = [Slots.INTENT, Slots.COUNTRY]
 
     def getIntent(self):
-        return self.intent
+        #return self.requiredSlots[Slots.INTENT]
+        return self.slots[Slots.INTENT]
 
     def getCountry(self):
-        return self.country
+        #return self.requiredSlots[Slots.COUNTRY]
+        return self.slots[Slots.COUNTRY]
 
-    def setCountry(self, country):
-        self.country = country
+    def getSlot(self, slotName):
+        #if slotName in self.requiredSlots:
+        #    return self.requiredSlots[slotName]
+        #if slotName in self.optionalSlots:
+        #    return self.optionalSlots[slotName]
+        return self.slots.get(slotName, None)
 
-    @abstractmethod
+    def getSlots(self):
+        """
+        Return all the slots, including required and optional slots, 
+        empty slots' values would be None.
+        """
+        #result = self.requiredSlots.copy()
+        #for k, v in self.optionalSlots.items():
+        #    result[k] = v
+        #return result
+        return self.slots
+
+    #def setRequiredSlot(self, slotName, slotValue):
+    #    self.requiredSlots[slotName] = slotValue
+
+    #def setOptionalSlot(self, slotName, slotValue):
+    #    self.optionalSlots[slotName] = slotValue
+
+    def setSlot(self, slotName, slotValue):
+        self.slots[slotName] = slotValue
+
     def isComplete(self):
         """
         Check if all the needed slots to answer the question are filled
         """
-        raise NotImplementedError("isComplete is not implemented")
+        #for k,v in self.requiredSlots.items():
+        #    if v is None:
+        #        return False
+        #return True
+        for slotName in self.requiredSlots:
+            if self.getSlot(slotName) is None:
+                return False
+        return True
+
+    def getEmptySlots(self):
+        # return [k for k,v in self.requiredSlots.items() if v is None]
+        return [k for k in self.requiredSlots if self.getSlot(k) is None]
+
+    #def getOptEmptySlots(self):
+    #    return [k for k,v in self.optionalSlots.items() if v is None]
