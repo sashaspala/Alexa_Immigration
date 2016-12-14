@@ -362,7 +362,7 @@ class QueryManager():
     Adds the Amazon ID to the db if it is not already there.
     """
     complete = True
-    user = self.queryDb('select * from UserInfo where amazonID={};'.format(amazon_id))
+    user = self.queryDb("select * from UserInfo where amazonID='{}';".format(amazon_id))
     if len(user) > 0:
       for field in user[0]:
         if field is None: # some field isn't populated
