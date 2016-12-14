@@ -352,13 +352,18 @@ class QueryManager():
     self.queryDb(q)
     
 
-  def isUserInDb(self, amazon_id):
+  def is_user_account_complete(self, amazon_id):
     """
     Given an Amazon ID, check to see if that user is in our db or not.
-    Returns a boolean, ==True if they exist.
+    Returns a boolean==True only if a record exists and is fully populated.
     """
-    q = 'select * from UserInfo where amazonID={};'.format(amazon_id)
-    return len(self.queryDb(q)) > 0
+    complete = True
+    user = self.queryDb('select * from UserInfo where amazonID={};'.format(amazon_id))
+    if len(user) > 0:
+      for field in user[0]:
+        pass
+    
+    return complete
 
 
   def addUser(self, user_dict):
