@@ -43,6 +43,8 @@ class UserSetup():
 
         if not response is None:
             speechlet = self.build_question_response(response)
+            #TODO: added return statement here, remove if not needed --Yuzhe
+            return speechlet
         else:
             return None
     def build_question_response(self, output):

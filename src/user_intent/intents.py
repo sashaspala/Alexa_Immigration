@@ -1,4 +1,4 @@
 class Intent:
-    MOVE = 1
-    INFORM = 2
-    JOB = 3
+    MOVE = "move"
+    INFORM = "inform"
+    JOB = "job"

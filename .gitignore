@@ -9,3 +9,6 @@ rds_config.py
 
 # .zip package
 *.zip
+
+# test event file
+test_request.txt
