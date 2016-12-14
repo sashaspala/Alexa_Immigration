@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Adapted from Alexa Skill sample color-expert-python
 """
@@ -36,12 +35,13 @@ class ArgumentManager:  # not sure if we really need the event session info
         topic = None
         for tag in self.slots:
             ## possible a country, city, topic
-            if 'country' in self.slots:
+            if 'value'  in self.slots['country']:
                 country = self.slots['country']['value']
-            if 'city' in self.slots:
-                city = self.slots['country']['value']
+            if 'value'  in self.slots['city']:
+                city = self.slots['city']['value']
             if 'topic' in self.slots:
-                topic = self.slots['country']['value']
+                if 'value' in self.slots['topic']:
+                    topic = self.slots['country']['value']
         ## now we have minimum values for intents/slots
         ## want to create intentObject, then pass to context manager
 
@@ -273,6 +273,7 @@ def on_intent(intent_request, session, user_id):
         return tell_missing_info(session) # send a response asking to try again
 
     ##query_db
+    print(str(unambiguousObject.getSlots()))
     fact = am.query_db(unambiguousObject.getSlots()) # feeds a dictionary containing slots and values, returns a string
     return on_intent_question_asked(fact, session, unambiguousObject, am.get_user_name())
 
@@ -329,12 +330,14 @@ def lambda_handler(event, context):
 
 
     ## FIRST CHECK IF NEW USER
+
     if 'user' not in event['session']:
         return build_response("link_account", build_link_account_response())
 
     else:
     ##authenticated?
     # todo: this might not be the way a user gets authenticated... let's check this
+        '''
         user_login_data = event['session']['user']
         if not 'accessToken' in user_login_data:
             ##go back and authenticate
@@ -342,6 +345,7 @@ def lambda_handler(event, context):
 
         new_user = False
         ##check if user's account is complete
+
 
         # user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
         qm = QueryManager()
@@ -354,7 +358,8 @@ def lambda_handler(event, context):
                 #default to new_session_response
                 return on_session_started(event['session'])
             return response
-
+        '''
+        test_token = "test_user"
         if event['request']['type'] == "LaunchRequest":
             # this is a new session and you didn't have any special request
             return on_launch(event['request'], event['session'])
@@ -364,7 +369,7 @@ def lambda_handler(event, context):
             # todo possibly implement new session functionality
            # if event['session']['new']:
                 # new session, need to update user object
-                return on_intent(event['request'], event['session'], event['session']['user']['accessToken'])
+                return on_intent(event['request'], event['session'], test_token)#event['session']['user']['accessToken'])
 
         elif event['request']['type'] == "SessionEndedRequest":
             return on_session_ended(event['request'], event['session'])
