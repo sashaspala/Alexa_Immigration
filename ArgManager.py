@@ -224,7 +224,7 @@ def help_intent(session):
                           build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
 
-def on_intent_question_asked(fact, session, name):
+def on_intent_question_asked(fact, session, intent_object, name):
     """This function takes a fact string created in response to an intent
         and builds a response to send back to Alexa"""
 
@@ -238,17 +238,17 @@ def on_intent_question_asked(fact, session, name):
     reprompt_text = "Would you like to learn anything else?"
 
     # add current session attributes to the list of session attributes
-    current_session = intentObject.getSlots()
+    current_session = intent_object.getSlots()
     current_session['fact'] = fact
 
     session['attributes']['questions'].append(current_session)  # possibly using it for card
     session_attributes = session.get('attributes')
 
-    return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
+    return build_response(session_attributes, build_speechlet_response(intent_object.getCountry(), \
                                                                        speech_output, reprompt_text, False))
 
 
-def on_launch(launch_request, session, is_new_user):
+def on_launch(launch_request, session):
     """Responds to Launch Requests"""
     if session['new']:
         return on_session_started(session)
@@ -274,7 +274,7 @@ def on_intent(intent_request, session, user_id):
 
     ##query_db
     fact = am.query_db(unambiguousObject.getSlots()) # feeds a dictionary containing slots and values, returns a string
-    return on_intent_question_asked(fact, session)
+    return on_intent_question_asked(fact, session, unambiguousObject, am.get_user_name(user_id))
 
 
 def create_final_card_output(session):
@@ -329,12 +329,16 @@ def lambda_handler(event, context):
 
 
     ## FIRST CHECK IF NEW USER
-    user_login_data = event['user']
-    ##authenticated?
-    if not 'accessToken' in user_login_data:
-        ##go back and authenticate
+    if 'user' not in event:
         return build_response("link_account", build_link_account_response())
+
     else:
+    ##authenticated?
+        user_login_data = event['user']
+        if not 'accessToken' in user_login_data:
+            ##go back and authenticate
+            return build_response("link_account", build_link_account_response())
+
         new_user = False
         ##check if user's account is complete
 
@@ -351,15 +355,13 @@ def lambda_handler(event, context):
 
         if event['request']['type'] == "LaunchRequest":
             # this is a new session and you didn't have any special request
-            return on_launch(event['request'], event['session'], event['user'],new_user)
+            return on_launch(event['request'], event['session'])
 
         elif event['request']['type'] == "IntentRequest":
 
             if event['session']['new']:
                 # new session, need to update user object
-                return on_intent(event['request'], event['session'], True, new_user)
-            else:
-                return on_intent(event['request'], event['session'], False, new_user)
+                return on_intent(event['request'], event['session'], event['user'])
 
         elif event['request']['type'] == "SessionEndedRequest":
             return on_session_ended(event['request'], event['session'])

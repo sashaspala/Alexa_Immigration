@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f091368f-c779-43a9-b169-a77c03e38c79" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/user_setup/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Alexa_Immigration.iml" afterPath="$PROJECT_DIR$/.idea/Alexa_Immigration.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ArgManager.py" afterPath="$PROJECT_DIR$/ArgManager.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/user_setup/UserSetup.py" afterPath="$PROJECT_DIR$/src/user_setup/UserSetup.py" />
     </list>
     <ignored path="Alexa_Immigration.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,11 +38,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ArgManager.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ArgManager.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ArgManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.3333333">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6674877">
+              <caret line="363" column="83" selection-start-line="363" selection-start-column="83" selection-end-line="363" selection-end-column="83" />
+              <folding>
+                <element signature="e#85#122#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -48,7 +63,7 @@
       <file leaf-file-name="QueryManager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/query_manager/QueryManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.2222223">
+            <state vertical-scroll-proportion="0.0">
               <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
               <folding>
                 <marker date="1481678828000" expanded="true" signature="3647:3662" placeholder="select missi... missing_value" />
@@ -64,11 +79,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserSetup.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserSetup.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/user_setup/UserSetup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.036945812">
-              <caret line="1" column="17" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/user_setup/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -92,8 +117,8 @@
         <option value="/Personal Practice/ColorsLambdaPython/colors.py" />
         <option value="$PROJECT_DIR$/lb.py" />
         <option value="$PROJECT_DIR$/DM.py" />
-        <option value="$PROJECT_DIR$/ArgManager.py" />
         <option value="$PROJECT_DIR$/src/user_setup/UserSetup.py" />
+        <option value="$PROJECT_DIR$/ArgManager.py" />
       </list>
     </option>
   </component>
@@ -227,6 +252,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="FullScreen" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -486,17 +513,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ArgManager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.3333333">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/query_manager/QueryManager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.2222223">
+        <state vertical-scroll-proportion="0.0">
           <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
           <folding>
             <marker date="1481678828000" expanded="true" signature="3647:3662" placeholder="select missi... missing_value" />
@@ -511,11 +530,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/user_setup/UserSetup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.036945812">
-          <caret line="1" column="17" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/user_setup/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ArgManager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6674877">
+          <caret line="363" column="83" selection-start-line="363" selection-start-column="83" selection-end-line="363" selection-end-column="83" />
+          <folding>
+            <element signature="e#85#122#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
