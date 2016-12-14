@@ -1,5 +1,5 @@
 
-class UserSetup:
+class UserSetup():
     def __init__(self, auth_token):
         self.auth_token = auth_token
 
