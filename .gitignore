@@ -3,3 +3,9 @@
 
 # vim swp files
 *.swp
+
+# config file for db
+rds_config.py
+
+# .zip package
+*.zip
