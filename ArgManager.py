@@ -5,14 +5,12 @@ Adapted from Alexa Skill sample color-expert-python
 
 from __future__ import print_function
 
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 from src.user_intent.inform_object import InformObject
 from src.user_intent.move_object import MoveObject
 from src.user_intent.job_object import JobObject
-from ContextManager import ContextManager
-from QueryManager import QueryManager
-import UserSetup
+from src.context_manager.ContextManager import ContextManager
+from src.query_manager.QueryManager import QueryManager
+from src.user_setup.UserSetup import UserSetup
 import random
 
 
