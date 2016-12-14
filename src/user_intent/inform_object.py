@@ -8,7 +8,7 @@ class InformObject(IntentObject):
 		#self.topic = topic
 		#self.city = city
                 self.setSlot(Slots.TOPIC, topic)
-                self.requiredSlots.append(Slots.TOPIC)
+                self.setAsRequired(Slots.TOPIC)
                 self.setSlot(Slots.CITY, city)
 
 	#def isComplete(self):

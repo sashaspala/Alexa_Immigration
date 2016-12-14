@@ -11,6 +11,7 @@ class IntentObject:
         #self.requiredSlots = {Slots.INTENT : intent, Slots.COUNTRY : country}
         #self.optionalSlots = {}
         self.slots = {Slots.INTENT : intent, Slots.COUNTRY : country}
+        self.userInfo = {}
         self.requiredSlots = [Slots.INTENT, Slots.COUNTRY]
 
     def getIntent(self):
@@ -65,5 +66,14 @@ class IntentObject:
         # return [k for k,v in self.requiredSlots.items() if v is None]
         return [k for k in self.requiredSlots if self.getSlot(k) is None]
 
+    def setAsRequired(self, slotName):
+        self.requiredSlots.append(slotName)
+
     #def getOptEmptySlots(self):
     #    return [k for k,v in self.optionalSlots.items() if v is None]
+
+    def getUserInfo(self):
+        return self.userInfo
+
+    def setUserInfo(self, name, value):
+        self.userInfo[name] = value
