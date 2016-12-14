@@ -2,14 +2,15 @@
 from ..query_manager.QueryManager import QueryManager
 
 class ContextManager:
-    def __init__(self, user):
-        self.user = user
+    def __init__(self, amazon_id, username):
+        self.amazon_id = amazon_id
+        self.username = username
         self.qm = QueryManager()
 
     def getContext(self, intent_obj):
         """
         Complete empty slots in the supplied intent object.
-        Update context in database is necessary
+        Update context in database if necessary
         """
         # get latest context for a user
         # compare current intent obj with said context
@@ -20,8 +21,8 @@ class ContextManager:
         return intent_obj
 
     def retrieveContext(self):
-        context = self.qm.getContext({"user":self.user})
-        # assert context["user"] == self.user
+        context = self.qm.getContext({"amazon_id":self.amazon_id})
+        # assert context["amazon_id"] == self.amazon_id
         return context
         
     def mixinContext(self, intent_obj, context):
@@ -48,7 +49,8 @@ class ContextManager:
         if there hasn't been any previous context for the user, add the current 
         slots as an entry for this user.
         """
-        context["user"] = self.user
+        context["amazon_id"] = self.amazon_id
+        context["username"] = self.username
         self.qm.updateContext(context)
 
 if __name__ == "__main__":
