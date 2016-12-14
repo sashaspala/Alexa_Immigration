@@ -95,56 +95,18 @@ class ArgumentManager:  # not sure if we really need the event session info
         ###need to turn unabmiguousObject into a dictionary
         return QueryManager.getFact(unambiguousObject)
 
-
-
-def on_blank_session_started(session):
-    speech_output = "Welcome to Alexa Immigration Support!"
-    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you \
-    can say Alexa, what are jobs like in Australia? Currently, I can answer questions about \
-    jobs, moving, and general facts for Canada, Australia, and the UK."
-    session_attributes = session.get('attributes', {})
-    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, False))
-
-def on_session_started(session):
-    speech_output = "Welcome to Alexa Immigration Support!"
-    reprompt_text = "You can ask me things like, Alexa, how do I move to Canada? Or you \
-    can say Alexa, what are jobs like in Australia? Currently, I can answer questions about \
-    jobs, moving, and general facts for Canada, Australia, and the UK."
-    session_attributes = session.get('attributes', {})
-    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, True))
-
-def ask_clarification(session):
-    speech_output = "Sorry, I didn't understand what you said." \
-       "You can ask me things like, Alexa, how do I move to Canada? or " \
-       "can say Alexa, what are jobs like in Australia?" \
-       "Currently, I can answer questions about jobs, moving," \
-       "and general facts for Canada, Australia, and the UK."
-
-    reprompt_text = "Sorry, I didn't understand what you said." \
-       "You can ask me things like, Alexa, how do I move to Canada? or " \
-       "can say Alexa, what are jobs like in Australia?" \
-       "Currently, I can answer questions about jobs, moving," \
-       "and general facts for Canada, Australia, and the UK."
-
-    session_attributes = session.get('attributes', {})
-    should_end_session = False
-    return build_response(session_attributes, build_speechlet_response('Test', speech_output, reprompt_text, should_end_session))
-
-
-def on_intent_question_asked(fact, session, intentObject):
-    speech_output = fact
-    reprompt_text = ""
-
-    session_attributes = {"country": intentObject.getCountry(), "city": intentObject.getCountry(), \
-    "intent": intentObject.getIntent()}
-    return build_response(session_attributes, build_speechlet_response(intentObject.getCountry(), \
-    speech_output, reprompt_text, False))
-
-
-
 # response builders
 # ----------------------------------------------------------------------------
-
+def build_link_account_response():
+    return {
+      "version": "1.0",
+      "response": {
+        "outputSpeech": {"type":"PlainText","text":"Please go to your Alexa app and link your account."},
+        "card": {
+          "type": "LinkAccount"
+        }
+      }
+    }
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
     return {
@@ -290,9 +252,14 @@ def on_intent_question_asked(fact, session, intentObject):
                                                                        speech_output, reprompt_text, False))
 
 
-def on_launch(launch_request, session):
+def on_launch(launch_request, session, is_new_user):
     """Responds to Launch Requests"""
     if session['new']:
+        if is_new_user:
+            next_question_response = UserSetup(user_login_data['accessToken']['value'])
+            if next_question_response is not None:
+                #return
+                return build_response("new_user_setup", next_question_response)
         return on_session_started(session)
     else:  # when a request was made with no intent, and it's not the beginning of a session
         return ask_clarification(session)
@@ -302,6 +269,8 @@ def on_intent(intent_request, session, is_new_session):
     # redirect 'AMAZON.HelpIntent
     if intent_request['intent']['name'] == "AMAZON.HelpIntent":
         return help_intent(session)
+
+    ## first check if the user is new:
 
     am = ArgumentManager(intent_request['intent'], session)
     # sending the intents and context element to argurment manager
@@ -375,17 +344,30 @@ def lambda_handler(event, context):
     #     raise ValueError("Invalid Application ID")
 
 
-    if event['request']['type'] == "LaunchRequest":
-        # this is a new session and you didn't have any special request
-        return on_launch(event['request'], event['session'])
+    ## FIRST CHECK IF NEW USER
+    user_login_data = event['user']
+    ##authenticated?
+    if not 'accessToken' in user_login_data:
+        ##go back and authenticate
+        return build_response("link_account", build_link_account_response())
+    else:
+        new_user = False
+        ##check if user appears in our db
+        if not QueryManager.user_is_in_db(user_login_data['accessToken']['value']):
+            ##send to user_setup_functionality
+            new_user = True
 
-    elif event['request']['type'] == "IntentRequest":
+        if event['request']['type'] == "LaunchRequest":
+            # this is a new session and you didn't have any special request
+            return on_launch(event['request'], event['session'], event['user'],new_user)
 
-        if event['session']['new']:
-            # new session, need to update user object
-            return on_intent(event['request'], event['session'], True)
-        else:
-            return on_intent(event['request'], event['session'], False)
+        elif event['request']['type'] == "IntentRequest":
 
-    elif event['request']['type'] == "SessionEndedRequest":
-        return on_session_ended(event['request'], event['session'])
+            if event['session']['new']:
+                # new session, need to update user object
+                return on_intent(event['request'], event['session'], True, new_user)
+            else:
+                return on_intent(event['request'], event['session'], False, new_user)
+
+        elif event['request']['type'] == "SessionEndedRequest":
+            return on_session_ended(event['request'], event['session'])
