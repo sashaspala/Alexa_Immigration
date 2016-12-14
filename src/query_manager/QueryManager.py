@@ -181,9 +181,9 @@ class QueryManager():
     # supplied intent information
     country = intent.get('country',None)
     city = intent.get('city',None)
-    intent_type = intent.get('intent',None)
+    intent_type = userintent.get('intent',None)
     topic = intent.get('topic',None)
-    user = intent.get('user',None)
+    amazonID = intent.get('amazon_id',None)
     
     # tables and fields needed to locate and filter matches
     c_user = self.schema['context']['fields']['user']
@@ -193,6 +193,7 @@ class QueryManager():
     c_topic = self.schema['context']['fields']['topic']
     user_table = self.schema['user']['table']
     user_id = self.schema['user']['fields']['id']
+    user_aid = self.schema['user']['fields']['amazonID']
     user_name = self.schema['user']['fields']['name']
     country_table = self.schema['country']['table']
     country_id = self.schema['country']['fields']['id']
@@ -233,11 +234,11 @@ class QueryManager():
                                             city_country,
                                             table,
                                             c_country))
-    # filter by specified user
-    if user is not None:
+    # filter by specified user auth_token (amazon id)
+    if amazonID is not None:
       conditions.append("{}.{} like '%{}%'".format(user_table,
-                                                   user_name,
-                                                   user))   
+                                                   user_aid,
+                                                   amazonID))   
     # filter by specified country
     if country is not None:
       conditions.append("{}.{} like '%{}%'".format(country_table,
@@ -268,9 +269,9 @@ class QueryManager():
                                                        table_id)) 
     r = self.queryDb(" ".join(query))
     # return a dictionary
-    output = {'user':None, 'country':None, 'city':None, 'intent':None, 'topic':None}
+    output = {'username':None, 'country':None, 'city':None, 'intent':None, 'topic':None}
     if len(r) > 0:
-      output = {'user':r[0][0], 'country':r[0][1], 'city':r[0][2], 'intent':r[0][3], 'topic':r[0][4]} 
+      output = {'username':r[0][0], 'country':r[0][1], 'city':r[0][2], 'intent':r[0][3], 'topic':r[0][4]} 
     return output
     
     
