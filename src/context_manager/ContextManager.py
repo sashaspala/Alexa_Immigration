@@ -3,6 +3,9 @@ from ..query_manager.QueryManager import QueryManager
 
 class ContextManager:
     def __init__(self, amazon_id, username):
+        #TODO: should context manager take both amazon_id and username here?
+        #      did we previously pass access token as user(name)? 
+        #      can we even get the user's username?
         self.amazon_id = amazon_id
         self.username = username
         self.qm = QueryManager()
@@ -12,10 +15,6 @@ class ContextManager:
         Complete empty slots in the supplied intent object.
         Update context in database if necessary
         """
-        # get latest context for a user
-        # compare current intent obj with said context
-        # fill in empty slots
-        # determine if update is needed, and updateContext if yes
         context = self.retrieveContext()
         mixinContext(self, intent_obj, context)
         return intent_obj
@@ -50,6 +49,8 @@ class ContextManager:
         slots as an entry for this user.
         """
         context["amazon_id"] = self.amazon_id
+        # TODO: make sure we need both amazon_id and username, if we only 
+        # need amazon_id, then delete the line below. 
         context["username"] = self.username
         self.qm.updateContext(context)
 
