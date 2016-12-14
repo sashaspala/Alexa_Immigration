@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f091368f-c779-43a9-b169-a77c03e38c79" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ArgManager.py" afterPath="$PROJECT_DIR$/ArgManager.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/query_manager/QueryManager.py" afterPath="$PROJECT_DIR$/src/query_manager/QueryManager.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/user_setup/UserSetup.py" afterPath="$PROJECT_DIR$/src/user_setup/UserSetup.py" />
     </list>
     <ignored path="Alexa_Immigration.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,14 +37,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ArgManager.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ArgManager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ArgManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4063927">
-              <caret line="336" column="83" selection-start-line="336" selection-start-column="83" selection-end-line="336" selection-end-column="83" />
+            <state vertical-scroll-proportion="-19.333334">
+              <caret line="368" column="0" selection-start-line="368" selection-start-column="0" selection-end-line="368" selection-end-column="0" />
               <folding>
                 <element signature="e#85#122#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rds_config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/query_manager/rds_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="2" column="71" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="71" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -56,20 +69,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryManager.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="QueryManager.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/query_manager/QueryManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.3859649">
+              <caret line="486" column="15" selection-start-line="486" selection-start-column="15" selection-end-line="486" selection-end-column="15" />
               <folding>
-                <marker date="1481678828000" expanded="true" signature="3647:3662" placeholder="select missi... missing_value" />
-                <marker date="1481678828000" expanded="true" signature="8506:8548" placeholder="select missi... missing_value" />
-                <marker date="1481678828000" expanded="true" signature="13408:13446" placeholder="select missi... missing_value" />
-                <marker date="1481678828000" expanded="true" signature="14038:14076" placeholder="select missi... missing_value" />
-                <marker date="1481678828000" expanded="true" signature="14711:14749" placeholder="select missi... missing_value" />
-                <marker date="1481678828000" expanded="true" signature="15570:15601" placeholder="insert into missing_value... " />
-                <marker date="1481678828000" expanded="true" signature="15949:15987" placeholder="select * fro... UserInfo" />
-                <marker date="1481678828000" expanded="true" signature="17563:17594" placeholder="insert into missing_value... " />
+                <element signature="e#25#35#0" expanded="true" />
+                <marker date="1481712216000" expanded="true" signature="3676:3691" placeholder="select missi... missing_value" />
+                <marker date="1481712216000" expanded="true" signature="8601:8649" placeholder="select missi... missing_value" />
+                <marker date="1481712216000" expanded="true" signature="13729:13767" placeholder="select missi... missing_value" />
+                <marker date="1481712216000" expanded="true" signature="14362:14400" placeholder="select missi... missing_value" />
+                <marker date="1481712216000" expanded="true" signature="15035:15073" placeholder="select missi... missing_value" />
+                <marker date="1481712216000" expanded="true" signature="15894:15925" placeholder="insert into missing_value... " />
+                <marker date="1481712216000" expanded="true" signature="16415:16457" placeholder="select * fro... UserInfo" />
+                <marker date="1481712216000" expanded="true" signature="17067:17106" placeholder="select missi... missing_value" />
+                <marker date="1481712216000" expanded="true" signature="18643:18676" placeholder="update missi... " />
+                <marker date="1481712216000" expanded="true" signature="20338:20369" placeholder="insert into missing_value... " />
+                <marker date="1481712216000" expanded="true" signature="21296:21346" placeholder="select missi... missing_value" />
               </folding>
             </state>
           </provider>
@@ -79,7 +96,7 @@
         <entry file="file://$PROJECT_DIR$/src/user_setup/UserSetup.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+              <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -113,8 +130,9 @@
         <option value="/Personal Practice/ColorsLambdaPython/colors.py" />
         <option value="$PROJECT_DIR$/lb.py" />
         <option value="$PROJECT_DIR$/DM.py" />
-        <option value="$PROJECT_DIR$/src/user_setup/UserSetup.py" />
         <option value="$PROJECT_DIR$/ArgManager.py" />
+        <option value="$PROJECT_DIR$/src/user_setup/UserSetup.py" />
+        <option value="$PROJECT_DIR$/src/query_manager/QueryManager.py" />
       </list>
     </option>
   </component>
@@ -509,35 +527,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/query_manager/QueryManager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
-          <folding>
-            <marker date="1481678828000" expanded="true" signature="3647:3662" placeholder="select missi... missing_value" />
-            <marker date="1481678828000" expanded="true" signature="8506:8548" placeholder="select missi... missing_value" />
-            <marker date="1481678828000" expanded="true" signature="13408:13446" placeholder="select missi... missing_value" />
-            <marker date="1481678828000" expanded="true" signature="14038:14076" placeholder="select missi... missing_value" />
-            <marker date="1481678828000" expanded="true" signature="14711:14749" placeholder="select missi... missing_value" />
-            <marker date="1481678828000" expanded="true" signature="15570:15601" placeholder="insert into missing_value... " />
-            <marker date="1481678828000" expanded="true" signature="15949:15987" placeholder="select * fro... UserInfo" />
-            <marker date="1481678828000" expanded="true" signature="17563:17594" placeholder="insert into missing_value... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/user_setup/UserSetup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -550,12 +543,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/query_manager/rds_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="71" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/user_setup/UserSetup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ArgManager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4063927">
-          <caret line="336" column="83" selection-start-line="336" selection-start-column="83" selection-end-line="336" selection-end-column="83" />
+        <state vertical-scroll-proportion="-19.333334">
+          <caret line="368" column="0" selection-start-line="368" selection-start-column="0" selection-end-line="368" selection-end-column="0" />
           <folding>
             <element signature="e#85#122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/query_manager/QueryManager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3859649">
+          <caret line="486" column="15" selection-start-line="486" selection-start-column="15" selection-end-line="486" selection-end-column="15" />
+          <folding>
+            <element signature="e#25#35#0" expanded="true" />
+            <marker date="1481712216000" expanded="true" signature="3676:3691" placeholder="select missi... missing_value" />
+            <marker date="1481712216000" expanded="true" signature="8601:8649" placeholder="select missi... missing_value" />
+            <marker date="1481712216000" expanded="true" signature="13729:13767" placeholder="select missi... missing_value" />
+            <marker date="1481712216000" expanded="true" signature="14362:14400" placeholder="select missi... missing_value" />
+            <marker date="1481712216000" expanded="true" signature="15035:15073" placeholder="select missi... missing_value" />
+            <marker date="1481712216000" expanded="true" signature="15894:15925" placeholder="insert into missing_value... " />
+            <marker date="1481712216000" expanded="true" signature="16415:16457" placeholder="select * fro... UserInfo" />
+            <marker date="1481712216000" expanded="true" signature="17067:17106" placeholder="select missi... missing_value" />
+            <marker date="1481712216000" expanded="true" signature="18643:18676" placeholder="update missi... " />
+            <marker date="1481712216000" expanded="true" signature="20338:20369" placeholder="insert into missing_value... " />
+            <marker date="1481712216000" expanded="true" signature="21296:21346" placeholder="select missi... missing_value" />
           </folding>
         </state>
       </provider>

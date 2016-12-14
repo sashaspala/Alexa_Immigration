@@ -3,7 +3,7 @@ class UserSetup():
     def __init__(self, auth_token):
         self.auth_token = auth_token
 
-    def add_characteristic_to_db(self, slots):
+    def add_characteristic_to_db(self, slots, queryObject):
         if slots is not None:
             ##add this
             slot_to_add = slots[1]
@@ -12,7 +12,7 @@ class UserSetup():
             dict_for_query = {slot_to_add['name']:slot_to_add['value']}
 
             # adds a specific user characteristic given user token
-            QueryManager.add_user_element(self.auth_token, dict_for_query)
+            qm.add_user_element(self.auth_token, dict_for_query)
 
         return self.find_next_question()
 

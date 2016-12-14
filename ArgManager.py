@@ -348,7 +348,7 @@ def lambda_handler(event, context):
         qm = QueryManager()
         if not qm.is_user_account_complete(user_login_data['accessToken']):
             ##create new user_setup object
-            user_setup = UserSetup(user_login_data['accessToken'])
+            user_setup = UserSetup(user_login_data['accessToken'], qm)
             ##send to user_setup_functionality
             response = user_setup.add_characteristic_to_db(event['request']['slots']) # todo: where are the slots coming from?
             if response is None:
