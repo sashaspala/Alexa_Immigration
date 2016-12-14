@@ -28,6 +28,7 @@ class ArgumentManager:  # not sure if we really need the event session info
         self.slots = intent['slots']
         self.context = context
         self.user_id = user_id
+        self.qm = QueryManager.QueryManager()
 
     def createIntentObject(self):
         country = None
@@ -62,8 +63,8 @@ class ArgumentManager:  # not sure if we really need the event session info
         return self.user_id
 
     def get_user_name(self):
-        # todo: CLAY, return the name of the person given the user_id
-        return QueryManager.get_name(self.user_id)
+        # return the name of the person given the user_id
+        return self.qm.get_name(self.user_id)
 
     def checkForUser(self):
         session = self.context
@@ -88,7 +89,7 @@ class ArgumentManager:  # not sure if we really need the event session info
 
     def query_db(self, unambiguousObject):
         dict = unambiguousObject.getSlots()
-        return QueryManager.getFact(unambiguousObject)
+        return self.qm.getFact(unambiguousObject)
 
 # response builders
 # ----------------------------------------------------------------------------
@@ -343,8 +344,9 @@ def lambda_handler(event, context):
         new_user = False
         ##check if user's account is complete
 
-        # todo: CLAY, user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
-        if not QueryManager.is_user_account_complete(user_login_data['accessToken']['value']):
+        # user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
+        qm = QueryManager.QueryManager()
+        if not qm.is_user_account_complete(user_login_data['accessToken']['value']):
             ##create new user_setup object
             user_setup = UserSetup(user_login_data['accessToken']['value'])
             ##send to user_setup_functionality
