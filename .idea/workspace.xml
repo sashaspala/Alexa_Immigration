@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f091368f-c779-43a9-b169-a77c03e38c79" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/user_setup/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Alexa_Immigration.iml" afterPath="$PROJECT_DIR$/.idea/Alexa_Immigration.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ArgManager.py" afterPath="$PROJECT_DIR$/ArgManager.py" />
     </list>
     <ignored path="Alexa_Immigration.iws" />
@@ -41,8 +37,8 @@
       <file leaf-file-name="ArgManager.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ArgManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6674877">
-              <caret line="363" column="83" selection-start-line="363" selection-start-column="83" selection-end-line="363" selection-end-column="83" />
+            <state vertical-scroll-proportion="0.5566502">
+              <caret line="361" column="63" selection-start-line="361" selection-start-column="63" selection-end-line="361" selection-end-column="63" />
               <folding>
                 <element signature="e#85#122#0" expanded="true" />
               </folding>
@@ -556,8 +552,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ArgManager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6674877">
-          <caret line="363" column="83" selection-start-line="363" selection-start-column="83" selection-end-line="363" selection-end-column="83" />
+        <state vertical-scroll-proportion="0.5566502">
+          <caret line="361" column="63" selection-start-line="361" selection-start-column="63" selection-end-line="361" selection-end-column="63" />
           <folding>
             <element signature="e#85#122#0" expanded="true" />
           </folding>

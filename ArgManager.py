@@ -359,7 +359,8 @@ def lambda_handler(event, context):
 
         elif event['request']['type'] == "IntentRequest":
 
-            if event['session']['new']:
+            # todo possibly implement new session functionality
+           # if event['session']['new']:
                 # new session, need to update user object
                 return on_intent(event['request'], event['session'], event['user'])
 
