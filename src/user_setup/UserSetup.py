@@ -1,26 +1,34 @@
 
 class UserSetup():
-    def __init__(self, auth_token):
+    def __init__(self, auth_token, qm):
         self.auth_token = auth_token
+        self.qm = qm
+        self.slot_names = ['job_title', 'industry_name', 'age', 'language', 'education', 'user_name']
 
-    def add_characteristic_to_db(self, slots, queryObject):
+    def add_characteristic_to_db(self, slots):
         if slots is not None:
-            ##add this
-            slot_to_add = slots[1]
+            ##determine what slot type it has it has
+            type_name = self.get_slot_name(slots)
+            slot_to_add = slots[type_name]['name']
             ## add type, value
-            print(slots[1])
-            dict_for_query = {slot_to_add['name']:slot_to_add['value']}
+            dict_for_query = {}
+            dict_for_query[slot_to_add] = slots[type_name]['value']
 
             # adds a specific user characteristic given user token
-            qm.add_user_element(self.auth_token, dict_for_query)
+            self.qm.add_user_element(self.auth_token, dict_for_query)
 
         return self.find_next_question()
-
+    def get_slot_name(self, slots):
+        for type in self.slot_names:
+            if type in slots:
+                return type
+        return None
     def find_next_question(self):
         #find the next user setup question
 
         # finds the next question we should ask given user token
-        next_question = QueryManager.find_next_user_setup(self.auth_token)
+        next_question = self.qm.find_next_user_setup(self.auth_token)
+        print(next_question)
         if next_question == "age":
             response = "Can you tell me how old you are? For example, I am 1 week old! Unfortunately, since I'm so " \
                        "young I need you to tell me in a full sentence so I can understand you."

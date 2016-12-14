@@ -28,7 +28,7 @@ class ArgumentManager:  # not sure if we really need the event session info
         self.slots = intent['slots']
         self.context = context
         self.user_id = user_id
-        self.qm = QueryManager.QueryManager()
+        self.qm = QueryManager()
 
     def createIntentObject(self):
         country = None
@@ -36,12 +36,12 @@ class ArgumentManager:  # not sure if we really need the event session info
         topic = None
         for tag in self.slots:
             ## possible a country, city, topic
-            if tag == 'country' and 'value' in self.slots[tag]:
-                country = tag['value']
-            if tag == 'city' and 'value' in self.slots[tag]:
-                city = tag['value']
-            if tag == 'topic' and 'value' in self.slots[tag]:
-                topic = tag['value']
+            if 'country' in self.slots:
+                country = self.slots['country']['value']
+            if 'city' in self.slots:
+                city = self.slots['country']['value']
+            if 'topic' in self.slots:
+                topic = self.slots['country']['value']
         ## now we have minimum values for intents/slots
         ## want to create intentObject, then pass to context manager
 
@@ -76,7 +76,7 @@ class ArgumentManager:  # not sure if we really need the event session info
             return None
 
     def getContextObject(self, intent_object, user):
-        contextManager = ContextManager(user)
+        contextManager = ContextManager(user, self.get_user_name())
         contextObject = contextManager.getContext(intent_object)
 
         # maybe, if session is not new, we might have to confirm that it's
@@ -88,8 +88,8 @@ class ArgumentManager:  # not sure if we really need the event session info
         pass
 
     def query_db(self, unambiguousObject):
-        dict = unambiguousObject.getSlots()
-        return self.qm.getFact(unambiguousObject)
+        dictionary = unambiguousObject.getSlots()
+        return self.qm.getFact(dictionary)
 
 # response builders
 # ----------------------------------------------------------------------------
@@ -262,7 +262,7 @@ def on_intent(intent_request, session, user_id):
     if intent_request['intent']['name'] == "AMAZON.HelpIntent":
         return help_intent(session)
 
-    am = ArgumentManager(intent_request['intent'], session, user_id)
+    am = ArgumentManager(intent_request['intent'], user_id)
     # sending the intents and context element to argurment manager
 
     # get my outgoing object from the contextmanager
@@ -271,7 +271,7 @@ def on_intent(intent_request, session, user_id):
 
     # if slots are missing and contextManager can't fill them with previous context
     if unambiguousObject.isComplete() == False:
-        tell_missing_info(session) # send a response asking to try again
+        return tell_missing_info(session) # send a response asking to try again
 
     ##query_db
     fact = am.query_db(unambiguousObject.getSlots()) # feeds a dictionary containing slots and values, returns a string
@@ -350,7 +350,7 @@ def lambda_handler(event, context):
             ##create new user_setup object
             user_setup = UserSetup(user_login_data['accessToken'], qm)
             ##send to user_setup_functionality
-            response = user_setup.add_characteristic_to_db(event['request']['slots']) # todo: where are the slots coming from?
+            response = user_setup.add_characteristic_to_db(event['request']['intent']['slots']) # todo: where are the slots coming from?
             if response is None:
                 #default to new_session_response
                 return on_session_started(event['session'])
@@ -365,7 +365,7 @@ def lambda_handler(event, context):
             # todo possibly implement new session functionality
            # if event['session']['new']:
                 # new session, need to update user object
-                return on_intent(event['request'], event['session'], event['user'])
+                return on_intent(event['request'], event['session'], event['session']['user']['accessToken'])
 
         elif event['request']['type'] == "SessionEndedRequest":
             return on_session_ended(event['request'], event['session'])
