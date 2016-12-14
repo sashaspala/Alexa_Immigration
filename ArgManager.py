@@ -335,7 +335,7 @@ def lambda_handler(event, context):
     else:
     ##authenticated?
         user_login_data = event['session']['user']
-        if not 'access_token' in user_login_data:
+        if not 'accessToken' in user_login_data:
             ##go back and authenticate
             return build_response("link_account", build_link_account_response())
 
