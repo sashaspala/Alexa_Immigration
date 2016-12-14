@@ -36,11 +36,11 @@ class ArgumentManager:  # not sure if we really need the event session info
         topic = None
         for tag in self.slots:
             ## possible a country, city, topic
-            if tag == 'country':
+            if tag == 'country' and 'value' in self.slots[tag]:
                 country = tag['value']
-            if tag == 'city':
+            if tag == 'city' and 'value' in self.slots[tag]:
                 city = tag['value']
-            if tag == 'topic':
+            if tag == 'topic' and 'value' in self.slots[tag]:
                 topic = tag['value']
         ## now we have minimum values for intents/slots
         ## want to create intentObject, then pass to context manager
@@ -346,11 +346,11 @@ def lambda_handler(event, context):
 
         # user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
         qm = QueryManager()
-        if not qm.is_user_account_complete(user_login_data['accessToken']['value']):
+        if not qm.is_user_account_complete(user_login_data['accessToken']):
             ##create new user_setup object
-            user_setup = UserSetup(user_login_data['accessToken']['value'])
+            user_setup = UserSetup(user_login_data['accessToken'])
             ##send to user_setup_functionality
-            response = user_setup.add_characteristic_to_db(event['request']['slots'])
+            response = user_setup.add_characteristic_to_db(event['request']['slots']) # todo: where are the slots coming from?
             if response is None:
                 #default to new_session_response
                 return on_session_started(event['session'])
@@ -369,4 +369,3 @@ def lambda_handler(event, context):
 
         elif event['request']['type'] == "SessionEndedRequest":
             return on_session_ended(event['request'], event['session'])
-
