@@ -87,9 +87,8 @@ class ArgumentManager:  # not sure if we really need the event session info
         # take a context object, and remove unneccessary information
         pass
 
-    def query_db(self, unambiguousObject):
-        dictionary = unambiguousObject.getSlots()
-        return self.qm.getFact(dictionary)
+    def query_db(self, unambiguousDict):
+        return self.qm.getFact(unambiguousDict)
 
 # response builders
 # ----------------------------------------------------------------------------
@@ -242,7 +241,7 @@ def on_intent_question_asked(fact, session, intent_object, name):
     current_session = intent_object.getSlots()
     current_session['fact'] = fact
 
-    session['attributes']['questions'].append(current_session)  # possibly using it for card
+    #session['attributes']['questions'].append(current_session)  # possibly using it for card
     session_attributes = session.get('attributes')
 
     return build_response(session_attributes, build_speechlet_response(intent_object.getCountry(), \
@@ -275,7 +274,7 @@ def on_intent(intent_request, session, user_id):
 
     ##query_db
     fact = am.query_db(unambiguousObject.getSlots()) # feeds a dictionary containing slots and values, returns a string
-    return on_intent_question_asked(fact, session, unambiguousObject, am.get_user_name(user_id))
+    return on_intent_question_asked(fact, session, unambiguousObject, am.get_user_name())
 
 
 def create_final_card_output(session):

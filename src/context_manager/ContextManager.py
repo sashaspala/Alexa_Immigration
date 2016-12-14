@@ -49,7 +49,7 @@ class ContextManager:
         slots as an entry for this user.
         """
         context["amazon_id"] = self.amazon_id
-        # TODO: make sure we need both amazon_id and username, if we only 
+        # TODO: make sure we need both amazoin_id and username, if we only
         # need amazon_id, then delete the line below. 
         context["username"] = self.username
         self.qm.updateContext(context)

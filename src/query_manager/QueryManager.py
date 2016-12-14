@@ -387,7 +387,7 @@ class QueryManager():
     if len(r) > 0:
       return r[0][0] # return just the string
     else:
-      return ''    
+      return 'Sasha'
 
 
   def add_user_element(self, amazon_id, user_dict):
