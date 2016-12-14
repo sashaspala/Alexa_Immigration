@@ -489,22 +489,36 @@ class QueryManager():
 
   def find_next_user_setup(self, auth_token):
     """
-    Given a user's auth_token (amazonID), returns which if any field is missing in their 
+    Given a user's auth_token (amazonID), returns which if any field is missing in their record, in a particular order 
     """
+    #fields = ['age', 'name', 'education', 'industry_name', 'job_title', 'language']
+    fields = ['age', 'name', 'education', 'industry_name', 'language'] # job_title is not a field in db
+
+    table = self.schema['user']['table']
+    u_age = self.schema['user']['fields']['age']
+    u_name = self.schema['user']['fields']['name']
+    u_edu = self.schema['user']['fields']['education']
+    u_ind = self.schema['user']['fields']['industry']
+    u_lg = self.schema['user']['fields']['language']
+    u_aid = self.schema['user']['fields']['amazonID']
+
+    query = "select {},{},{},{},{} from {} where {} like '%{}%';".format(u_age,u_name,u_edu,u_ind,u_lg,
+                                                                         table,
+                                                                         u_aid, auth_token)
+    r = self.queryDb(query)
+    next = ''
+    if len(r) > 0:
+      for i in range(len(r[0])):
+        if r[0][i] is None:
+          next = fields[i]
+          break
+    return next
 
 
 
-        if next_question == "age":
-            response = "Can you tell me how old you are? For example, I am 1 week old! Unfortunately, since I'm so " \
-                       "young I need you to tell me in a full sentence so I can understand you."
-        elif next_question == "name":
-            response = "What would you like me to call you? It can be your actual name or a nickname."
-        elif next_question == "education":
-            response = "What is your highest level of education? You can say something like I graduated" \
-                       "high school, or I have a masters degree."
-        elif next_question == "industry_name":
-            response = "What industry do you work in? You can say something like I work in computer science, or" \
-                       "I work in the healthcare industry."
-        elif next_question == "job_title":
-            response = "What do you do for work? Are you a software engineer? Or perhaps a teacher?"
-        elif next_question == 'language':
+
+
+
+
+
+

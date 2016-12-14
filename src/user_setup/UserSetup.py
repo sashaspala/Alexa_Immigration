@@ -11,7 +11,7 @@ class UserSetup():
             print(slots[1])
             dict_for_query = {slot_to_add['name']:slot_to_add['value']}
 
-            # todo: CLAY, add this to Query Manager (adds a specific user characteristic given user token)
+            # adds a specific user characteristic given user token
             QueryManager.add_user_element(self.auth_token, dict_for_query)
 
         return self.find_next_question()
@@ -19,7 +19,7 @@ class UserSetup():
     def find_next_question(self):
         #find the next user setup question
 
-        # todo: CLAY, add this to Query Manager (finds the next question we should ask given user token)
+        # finds the next question we should ask given user token
         next_question = QueryManager.find_next_user_setup(self.auth_token)
         if next_question == "age":
             response = "Can you tell me how old you are? For example, I am 1 week old! Unfortunately, since I'm so " \
