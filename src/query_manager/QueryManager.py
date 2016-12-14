@@ -182,7 +182,7 @@ class QueryManager():
     # supplied intent information
     country = intent.get('country',None)
     city = intent.get('city',None)
-    intent_type = userintent.get('intent',None)
+    intent_type = intent.get('intent',None)
     topic = intent.get('topic',None)
     amazonID = intent.get('amazon_id',None)
     
@@ -484,8 +484,8 @@ class QueryManager():
     query = "insert into {} ({}) values ({});".format(table,
                                                       columns,
                                                       values)
-    print q
-    self.queryDb(q)
+    print query
+    self.queryDb(query)
 
 
   def find_next_user_setup(self, auth_token):

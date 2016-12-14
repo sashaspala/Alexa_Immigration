@@ -16,7 +16,7 @@ class ContextManager:
         Update context in database if necessary
         """
         context = self.retrieveContext()
-        mixinContext(self, intent_obj, context)
+        self.mixinContext(intent_obj, context)
         return intent_obj
 
     def retrieveContext(self):
@@ -31,7 +31,7 @@ class ContextManager:
         """
         slots = intent_obj.getSlots()
         context_changed = False
-        for k,v in slots:
+        for k,v in slots.iteritems():
             context_val = context.get(k, None)
             # fill in slots with context
             if v is None:
@@ -40,7 +40,7 @@ class ContextManager:
                 context[k] = v
                 context_changed = True
         if context_changed:
-            updateContext(context)
+            self.updateContext(context)
             
     def updateContext(self, context):
         """
