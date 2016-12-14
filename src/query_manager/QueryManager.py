@@ -356,14 +356,86 @@ class QueryManager():
     """
     Given an Amazon ID, check to see if that user is in our db or not.
     Returns a boolean==True only if a record exists and is fully populated.
+    Adds the Amazon ID to the db if it is not already there.
     """
     complete = True
     user = self.queryDb('select * from UserInfo where amazonID={};'.format(amazon_id))
     if len(user) > 0:
       for field in user[0]:
-        pass
-    
+        if field is None: # some field isn't populated
+          complete = False
+          break
+    else: # auth_token isn't in database at all
+      complete = False    
+      self.addUser({self.schema['user']['fields']['amazonID']:amazon_id})
     return complete
+
+
+  def get_name(self, amazon_id):
+    """
+    Returns user's name given their amazon auth_token
+    """
+    table = self.schema['user']['table']
+    user_name = self.schema['user']['fields']['name']
+    user_aid = self.schema['user']['fields']['amazonID']
+
+    query = "select {} from {} where {}='{}' limit 1;".format(user_name, table, user_aid, amazon_id)
+    r = self.queryDb(query)
+    if len(r) > 0:
+      return r[0][0] # return just the string
+    else:
+      return ''    
+
+
+  def add_user_element(self, amazon_id, user_dict):
+    """
+    Given a user's amazon_id and dictionary of info, update the db.
+    """
+    name = user_dict.get('name',None)
+    age = user_dict.get('age',None)
+    sex = user_dict.get('sex',None)
+    language = user_dict.get('language',None)
+    education = user_dict.get('education',None)
+    industry = user_dict.get('industry',None)
+
+    table = self.schema['user']['table']
+    user_aid = self.schema['user']['fields']['amazonID']
+    pairs = []
+    queries = []
+    
+    if name is not None:
+      c = self.schema['user']['fields']['name']
+      v=name[:45].join(["'", "'"])
+      pairs.append((c,v))
+    if sex is not None:
+      c=self.schema['user']['fields']['sex']
+      v=sex[:45].join(["'", "'"])
+      pairs.append((c,v))
+    if language is not None:
+      c=self.schema['user']['fields']['language']
+      v=language[:45].join(["'", "'"])
+      pairs.append((c,v))
+    if education is not None:
+      c=self.schema['user']['fields']['education']
+      v=education[:45].join(["'", "'"])
+      pairs.append((c,v))
+    if industry is not None:
+      c=self.schema['user']['fields']['industry']
+      v=industry[:45].join(["'", "'"])
+      pairs.append((c,v))
+    if age is not None:
+      c=self.schema['user']['fields']['age']
+      v=age
+      pairs.append((c,v))
+    
+    for p in pairs:
+      q = "update {} set {}={} where {}={}".format(table, p[0], p[1], user_aid, amazon_id)
+      queries.append(q)
+
+    query = ';'.join(queries)
+
+    print query
+    self.queryDb(query)
 
 
   def addUser(self, user_dict):
