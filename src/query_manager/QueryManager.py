@@ -20,7 +20,8 @@ class QueryManager():
     self.host  = rds_config.endpoint
     self.name = rds_config.user
     self.db = rds_config.db 
-    self.pw=getpass.getpass('pw?\t')
+    #self.pw=getpass.getpass('pw?\t')
+    self.pw = rds_config.pw
     # test the connection
     try:
         self.connect(timeout=15)
