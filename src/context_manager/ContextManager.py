@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..query_manager import QueryManager
+from ..query_manager.QueryManager import QueryManager
 
 class ContextManager:
     def __init__(self, user):
