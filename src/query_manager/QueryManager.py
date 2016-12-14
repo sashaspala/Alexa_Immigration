@@ -305,7 +305,11 @@ class QueryManager():
     u_id = self.queryDb("select {} from {} where {} like '%{}%'".format(user_id,
                                                                         user_table,
                                                                         user_aid,
-                                                                        amazonID))[0][0]
+                                                                        amazonID)) 
+    if len(u_id) > 0:
+      u_id=u_id[0][0]
+    else:
+      u_id='NULL'
     columns.append(c_user)
     values.append(str(u_id))
     
@@ -317,7 +321,11 @@ class QueryManager():
       cn_id = self.queryDb("select {} from {} where {} like '%{}%'".format(country_id,
                                                                            country_table,
                                                                            country_name,
-                                                                           country))[0][0] 
+                                                                           country))
+      if len(cn_id) > 0:
+        cn_id=cn_id[0][0]
+      else:
+        cn_id='NULL' 
       columns.append(c_country)
       values.append(str(cn_id))
       
@@ -334,7 +342,14 @@ class QueryManager():
         city_country = self.schema['city']['fields']['country']
         # we've already found the relevant country id
         q += " and {}={}".format(city_country, cn_id)
-      ct_id = self.queryDb(q)[0][0]
+
+      print q
+      
+      ct_id = self.queryDb(q)
+      if len(ct_id) > 0:
+        ct_id=ct_id[0][0]
+      else:
+        ct_id='NULL'
       columns.append(c_city)
       values.append(str(ct_id))
       
@@ -387,7 +402,7 @@ class QueryManager():
     if len(r) > 0:
       return r[0][0] # return just the string
     else:
-      return 'Sasha'
+      return 'Sasha'    
 
 
   def add_user_element(self, amazon_id, user_dict):
