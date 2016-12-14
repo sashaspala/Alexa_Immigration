@@ -345,7 +345,7 @@ def lambda_handler(event, context):
         ##check if user's account is complete
 
         # user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
-        qm = QueryManager.QueryManager()
+        qm = QueryManager()
         if not qm.is_user_account_complete(user_login_data['accessToken']['value']):
             ##create new user_setup object
             user_setup = UserSetup(user_login_data['accessToken']['value'])
@@ -369,3 +369,4 @@ def lambda_handler(event, context):
 
         elif event['request']['type'] == "SessionEndedRequest":
             return on_session_ended(event['request'], event['session'])
+
