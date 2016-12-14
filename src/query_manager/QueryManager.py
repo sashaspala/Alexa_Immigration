@@ -203,12 +203,13 @@ class QueryManager():
     city_name = self.schema['city']['fields']['name']
     
     conditions = []
-    query = ["select {}.{},{}.{},{}.{},{}.{},{}.{} from {}".format(user_table, user_name,
-                                                                   country_table, country_name,
-                                                                   city_table, city_name,
-                                                                   table, c_intent,
-                                                                   table, c_topic,
-                                                                   table)]
+    query = ["select {}.{},{}.{},{}.{},{}.{},{}.{},{}.{} from {}".format(user_table, user_name,
+                                                                         country_table, country_name,
+                                                                         city_table, city_name,
+                                                                         table, c_intent,
+                                                                         table, c_topic,
+                                                                         user_table, user_aid,
+                                                                         table)]
         
     # join user table to get user's name
     query.append("left outer join {} on {}.{}={}.{}".format(user_table,
@@ -269,9 +270,9 @@ class QueryManager():
                                                        table_id)) 
     r = self.queryDb(" ".join(query))
     # return a dictionary
-    output = {'username':None, 'country':None, 'city':None, 'intent':None, 'topic':None}
+    output = {'username':None, 'country':None, 'city':None, 'intent':None, 'topic':None, 'amazon_id':None}
     if len(r) > 0:
-      output = {'username':r[0][0], 'country':r[0][1], 'city':r[0][2], 'intent':r[0][3], 'topic':r[0][4]} 
+      output = {'amazon_id':r[0][5], 'username':r[0][0], 'country':r[0][1], 'city':r[0][2], 'intent':r[0][3], 'topic':r[0][4]} 
     return output
     
     
@@ -287,7 +288,7 @@ class QueryManager():
     c_city = self.schema['context']['fields']['city'] 
     c_intent = self.schema['context']['fields']['intent']
     c_topic = self.schema['context']['fields']['topic']
-    user = intent.get('user', '') # Only the User is assumed to have been supplied
+    amazonID = intent.get('amazon_id', '') # Only the User's aID is assumed to have been supplied
     country = intent.get('country', None)
     city = intent.get('city', None)
     intent_type = intent.get('intent', None)
@@ -299,11 +300,11 @@ class QueryManager():
     # get user
     user_id = self.schema['user']['fields']['id']
     user_table = self.schema['user']['table']
-    user_name = self.schema['user']['fields']['name']
+    user_aid = self.schema['user']['fields']['amazonID']
     u_id = self.queryDb("select {} from {} where {} like '%{}%'".format(user_id,
                                                                         user_table,
-                                                                        user_name,
-                                                                        user))[0][0]
+                                                                        user_aid,
+                                                                        amazonID))[0][0]
     columns.append(c_user)
     values.append(str(u_id))
     
@@ -485,62 +486,25 @@ class QueryManager():
     print q
     self.queryDb(q)
 
-  
-'''    
-###Send finished query object to dialog manager
-def sendQuery(queryObject):
-    var aws = require('aws-sdk');
-    var lambda = new aws.Lambda({
-      region: 'us-east-1' //change to your region
-    });
-    
-    lambda.invoke({
-      FunctionName: 'DialogManager',
-      Payload: JSON.stringify(queryObject, null, 2) // pass params
-    }, function(error, data) {
-      if (error) {
-        context.done('error', error);
-      }
-      if(data.Payload){
-       context.succeed(data.Payload)
-      }
-    });
-'''
 
-'''
-# -*- coding: utf-8 -*-
-import mysql.connector
-import boto3
-try:
-    import configparser
-except:
-    from six.moves import configparser
-import MySQLdb
-
-class QueryManager():
-    def __init__(self):
-        #connect to ec2 instance
-        ec2 = boto3.resource('ec2')
+  def find_next_user_setup(self, auth_token):
+    """
+    Given a user's auth_token (amazonID), returns which if any field is missing in their 
+    """
 
 
-    def
 
-
-    def sendQuery(queryObject):
-        var aws = require('aws-sdk');
-        var lambda = new aws.Lambda({
-          region: 'us-east-1' //change to your region
-        });
-
-        lambda.invoke({
-          FunctionName: 'DialogManager',
-          Payload: JSON.stringify(queryObject, null, 2) // pass params
-        }, function(error, data) {
-          if (error) {
-            context.done('error', error);
-          }
-          if(data.Payload){
-           context.succeed(data.Payload)
-          }
-        });
-'''
+        if next_question == "age":
+            response = "Can you tell me how old you are? For example, I am 1 week old! Unfortunately, since I'm so " \
+                       "young I need you to tell me in a full sentence so I can understand you."
+        elif next_question == "name":
+            response = "What would you like me to call you? It can be your actual name or a nickname."
+        elif next_question == "education":
+            response = "What is your highest level of education? You can say something like I graduated" \
+                       "high school, or I have a masters degree."
+        elif next_question == "industry_name":
+            response = "What industry do you work in? You can say something like I work in computer science, or" \
+                       "I work in the healthcare industry."
+        elif next_question == "job_title":
+            response = "What do you do for work? Are you a software engineer? Or perhaps a teacher?"
+        elif next_question == 'language':
