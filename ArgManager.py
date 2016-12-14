@@ -174,10 +174,6 @@ def on_session_started(session):
     # create a list in attributes that stores all fact dictionaries in current session
     # this will allow us to return a card at the end with a summary of the facts discussed
 
-    # todo: we might need to redirect a user to on_blank_session_started if the user
-    # todo: is using the app for the first time
-
-
     session_attributes = {'questions': []}
     speech_output = welcome_text + explanation_text
 
@@ -345,7 +341,7 @@ def lambda_handler(event, context):
         ##check if user's account is complete
 
         # todo: CLAY, user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
-        if not QueryManager.user_account_complete(user_login_data['accessToken']['value']):
+        if not QueryManager.is_user_account_complete(user_login_data['accessToken']['value']):
             ##create new user_setup object
             user_setup = UserSetup(user_login_data['accessToken']['value'])
             ##send to user_setup_functionality
