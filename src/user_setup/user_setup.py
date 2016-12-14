@@ -4,21 +4,28 @@ class UserSetup:
         self.auth_token = auth_token
 
     def add_characteristic_to_db(self, slots):
-        if intent is not None:
+        if slots is not None:
             ##add this
             slot_to_add = slots[1]
             ## add type, value
             print(slots[1])
             dict_for_query = {slot_to_add['name']:slot_to_add['value']}
-            QueryManager.add_user_element(dict_for_query)
+
+            # todo: CLAY, add this to Query Manager (adds a specific user characteristic given user token)
+            QueryManager.add_user_element(self.auth_token, dict_for_query)
 
         return self.find_next_question()
+
     def find_next_question(self):
         #find the next user setup question
+
+        # todo: CLAY, add this to Query Manager (finds the next question we should ask given user token)
         next_question = QueryManager.find_next_user_setup(self.auth_token)
         if next_question == "age":
-            response = "Can you tell me how old you are? For example, I am 1 week old! Since I'm so young I need you" \
-                       "to tell me in a full sentence so I can understand you."
+            response = "Can you tell me how old you are? For example, I am 1 week old! Unfortunately, since I'm so " \
+                       "young I need you to tell me in a full sentence so I can understand you."
+        elif next_question == "name":
+            response = "What would you like me to call you? It can be your actual name or a nickname."
         elif next_question == "education":
             response = "What is your highest level of education? You can say something like I graduated" \
                        "high school, or I have a masters degree."

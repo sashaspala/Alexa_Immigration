@@ -12,6 +12,8 @@ from src.user_intent.move_object import MoveObject
 from src.user_intent.job_object import JobObject
 from ContextManager import ContextManager
 from QueryManager import QueryManager
+import UserSetup
+import random
 
 
 welcome_text = "Welcome to Alexa Immigration Support. "
@@ -22,11 +24,12 @@ thank_you_text = "Thank you for using Alexa Immigration Support. Have a nice day
 
 
 class ArgumentManager:  # not sure if we really need the event session info
-    def __init__(self, intent, context=None):
+    def __init__(self, intent, user_id, context=None):
         self.intent = intent
         self.name = intent['name']
         self.slots = intent['slots']
         self.context = context
+        self.user_id = user_id
 
     def createIntentObject(self):
         country = None
@@ -57,6 +60,13 @@ class ArgumentManager:  # not sure if we really need the event session info
 
         return intent_object
 
+    def get_user_id(self):
+        return self.user_id
+
+    def get_user_name(self):
+        # todo: CLAY, return the name of the person given the user_id
+        return QueryManager.get_name(self.user_id)
+
     def checkForUser(self):
         session = self.context
 
@@ -66,20 +76,7 @@ class ArgumentManager:  # not sure if we really need the event session info
         else:
             return None
 
-
-    def buildUserInfo(self):
-        # extracts userID from session and returns it
-        return self.context['user']['userID']
-
-
-    def getUserInfo(self, session):
-        user = checkForUser(session)
-        #if user is not None:
-
-        #else:
-        pass
-
-    def getContextObject(self, intent_object, is_new_session, user):
+    def getContextObject(self, intent_object, user):
         contextManager = ContextManager(user)
         contextObject = contextManager.getContext(intent_object)
 
@@ -92,7 +89,7 @@ class ArgumentManager:  # not sure if we really need the event session info
         pass
 
     def query_db(self, unambiguousObject):
-        ###need to turn unabmiguousObject into a dictionary
+        dict = unambiguousObject.getSlots()
         return QueryManager.getFact(unambiguousObject)
 
 # response builders
@@ -233,12 +230,17 @@ def help_intent(session):
                           build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
 
-def on_intent_question_asked(fact, session, intentObject):
+def on_intent_question_asked(fact, session, name):
     """This function takes a fact string created in response to an intent
         and builds a response to send back to Alexa"""
 
     # gets fact, session, intent object(optional?)
-    speech_output = fact + " What else would you like to know?"  # continue the conversation
+    preamble = ""
+    if bool(random.getrandbits(1)):
+        preamble = "Ok, " + name + "here's, what I could find."
+
+    content = fact + " What else would you like to know?"  # continue the conversation
+    speech_output = preamble + content
     reprompt_text = "Would you like to learn anything else?"
 
     # add current session attributes to the list of session attributes
@@ -255,34 +257,22 @@ def on_intent_question_asked(fact, session, intentObject):
 def on_launch(launch_request, session, is_new_user):
     """Responds to Launch Requests"""
     if session['new']:
-        if is_new_user:
-            next_question_response = UserSetup(user_login_data['accessToken']['value'])
-            if next_question_response is not None:
-                #return
-                return build_response("new_user_setup", next_question_response)
         return on_session_started(session)
-    else:  # when a request was made with no intent, and it's not the beginning of a session
-        return ask_clarification(session)
+    # when a request was made with no intent, and it's not the beginning of a session
+    return ask_clarification(session)
 
 
-def on_intent(intent_request, session, is_new_session):
+def on_intent(intent_request, session, user_id):
     # redirect 'AMAZON.HelpIntent
     if intent_request['intent']['name'] == "AMAZON.HelpIntent":
         return help_intent(session)
 
-    ## first check if the user is new:
-
-    am = ArgumentManager(intent_request['intent'], session)
+    am = ArgumentManager(intent_request['intent'], session, user_id)
     # sending the intents and context element to argurment manager
 
     # get my outgoing object from the contextmanager
-    if is_new_session:
-        # additionally send user info from LinkAccount card
-        userId = am.buildUserInfo()
-        unambiguousObject = am.getContextObject(am.createIntentObject(), True,
-                                                userId)  # (of type intentObject)
-    else:
-        unambiguousObject = am.getContextObject(am.createIntentObject(), False, None)
+    unambiguousObject = am.getContextObject(am.createIntentObject(),
+                                            am.get_user_id())  # (of type intentObject)
 
     # if slots are missing and contextManager can't fill them with previous context
     if unambiguousObject.isComplete() == False:
@@ -352,10 +342,18 @@ def lambda_handler(event, context):
         return build_response("link_account", build_link_account_response())
     else:
         new_user = False
-        ##check if user appears in our db
-        if not QueryManager.user_is_in_db(user_login_data['accessToken']['value']):
+        ##check if user's account is complete
+
+        # todo: CLAY, user_account_complete (give user's auth_token) should return false if the user is in db but hasn't completed the setup, or if user is not in db
+        if not QueryManager.user_account_complete(user_login_data['accessToken']['value']):
+            ##create new user_setup object
+            user_setup = UserSetup(user_login_data['accessToken']['value'])
             ##send to user_setup_functionality
-            new_user = True
+            response = user_setup.add_characteristic_to_db(event['request']['slots'])
+            if response is None:
+                #default to new_session_response
+                return on_session_started(event['session'])
+            return response
 
         if event['request']['type'] == "LaunchRequest":
             # this is a new session and you didn't have any special request
