@@ -432,7 +432,7 @@ class QueryManager():
       pairs.append((c,v))
     
     for p in pairs:
-      q = "update {} set {}={} where {}={}".format(table, p[0], p[1], user_aid, amazon_id)
+      q = "update {} set {}={} where {}='{}'".format(table, p[0], p[1], user_aid, amazon_id)
       queries.append(q)
 
     query = ';'.join(queries)
