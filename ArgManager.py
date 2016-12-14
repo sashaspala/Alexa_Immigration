@@ -329,11 +329,12 @@ def lambda_handler(event, context):
 
 
     ## FIRST CHECK IF NEW USER
-    if 'user' not in event:
+    if 'user' not in event['session']['user']:
         return build_response("link_account", build_link_account_response())
 
     else:
     ##authenticated?
+    # todo: this might not be the way a user gets authenticated... let's check this
         user_login_data = event['session']['user']
         if not 'accessToken' in user_login_data:
             ##go back and authenticate
